@@ -11,8 +11,117 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.nrst1.scheduleguide.MainActivity">
 
-    <TextView
+    <Spinner
+        android:id="@+id/year"
+        android:entries="@array/year"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp" ></Spinner>
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/pre_month"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="left"
+            android:src="@drawable/back_button"/>
+
+        <Spinner
+            android:id="@+id/month"
+            android:entries="@array/month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp" ></Spinner>
+
+        <ImageView
+            android:id="@+id/next_month"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="right"
+            android:src="@drawable/next_button"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sun"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:textSize="15sp"
+                android:textColor="@color/red" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mon"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:textSize="15sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tus"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:textSize="15sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Wed"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:textSize="15sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Thu"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:textSize="15sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Fri"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:textSize="15sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sat"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:textSize="15sp"
+                android:textColor="@color/blue" />
+        </LinearLayout>
+
+        <GridView
+            android:id="@+id/grid_calander"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:numColumns="7"
+            android:orientation="vertical"
+            android:stretchMode="columnWidth"
+            android:layout_margin="0dp">
+        </GridView>
+    </LinearLayout>
 </LinearLayout>
