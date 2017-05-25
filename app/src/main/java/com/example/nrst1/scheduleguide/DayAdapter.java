@@ -52,6 +52,8 @@ public class DayAdapter extends BaseAdapter {
             v = vi.inflate(R.layout.day, null);
         }
 
+        if(position == 0) dayIndex = 0;
+
         final Day day = days.get(dayIndex);
 
         if(day != null) {
@@ -66,6 +68,7 @@ public class DayAdapter extends BaseAdapter {
             }
         }
 
+        // TODO : 메인 화면의 크기가 작아지는 경우 달력의 크기도 작아짐 (ex. 키보드 )
         int height = parent.getHeight() / 6;
         v.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, height));
 
