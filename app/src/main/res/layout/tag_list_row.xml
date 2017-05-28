@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:padding="20dp"
+    android:layout_height="wrap_content">
+
+    <!-- TODO : 동그라미 모양으로 View 수정 -->
+    <TextView
+        android:id="@+id/tag_color_text"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/tag_name_text"
+        android:textSize="15sp"
+        android:layout_gravity="center_vertical"
+        android:layout_width="0dp"
+        android:layout_weight="4"
+        android:layout_height="match_parent"
+        android:paddingLeft="10dp"/>
+
+    <TextView
+        android:id="@+id/tag_alarm_text"
+        android:textSize="15sp"
+        android:layout_gravity="center_vertical"
+        android:layout_width="0dp"
+        android:layout_weight="4"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/tag_modification_img"
+        android:layout_gravity="center"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/modification"/>
+
+</LinearLayout>
