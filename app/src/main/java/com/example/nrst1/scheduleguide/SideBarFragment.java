@@ -1,6 +1,7 @@
 package com.example.nrst1.scheduleguide;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -75,7 +76,8 @@ public class SideBarFragment extends Fragment {
         setTagText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO : 태그 설정 화면
+                Intent intent = new Intent(getActivity(), TagListActivity.class);
+                startActivity(intent);
             }
         });
     }
