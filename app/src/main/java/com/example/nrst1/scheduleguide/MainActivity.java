@@ -1,8 +1,11 @@
 package com.example.nrst1.scheduleguide;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 
@@ -35,6 +38,15 @@ public class MainActivity extends AppCompatActivity {
         calanderGrid = (GridView) findViewById(R.id.grid_calander);
         DayAdapter dayAdapter = new DayAdapter(this, days);
         calanderGrid.setAdapter(dayAdapter);
+
+        // TODO : 선택한 날짜에 일정이 있으면 일정 목록 페이지로 이동하도록 분기 처리 
+        calanderGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplication(), AddScheduleActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
