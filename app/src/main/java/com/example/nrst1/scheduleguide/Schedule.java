@@ -1,6 +1,5 @@
 package com.example.nrst1.scheduleguide;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -11,8 +10,8 @@ public class Schedule {
     int key;
     int tag;
     String title;
-    SimpleDateFormat startDate;
-    SimpleDateFormat endDate;
+    String startDate;
+    String endDate;
     double alarm;
     String location;
     ArrayList<Attandance> attandances;
@@ -20,7 +19,7 @@ public class Schedule {
     String memo;
 
     Schedule() {}
-    Schedule(int tag, String title, SimpleDateFormat startDate, SimpleDateFormat endDate, double alarm, String location, ArrayList<Attandance> attandances, String color, String memo) {
+    Schedule(int tag, String title, String startDate, String endDate, double alarm, String location, ArrayList<Attandance> attandances, String color, String memo) {
         this.key = -1;
         this.tag = tag;
         this.title = title;
@@ -36,8 +35,8 @@ public class Schedule {
     void setKey(int key) { this.key = key; }
     void setTag(int tag) { this.tag = tag; }
     void setTitle(String title) { this.title = title; }
-    void setStartDate(SimpleDateFormat startDate) { this.startDate = startDate; }
-    void setEndDate(SimpleDateFormat endDate) { this.endDate = endDate; }
+    void setStartDate(String startDate) { this.startDate = startDate; }
+    void setEndDate(String endDate) { this.endDate = endDate; }
     void setAlarm(double alarm) { this.alarm = alarm; }
     void setLocation(String location) { this.location = location; }
     void setAttandances(ArrayList<Attandance> attandances) { this.attandances = attandances; }
@@ -47,8 +46,8 @@ public class Schedule {
     int getKey() { return this.key; }
     int getTag() { return this.tag; }
     String getTitle() { return this.title; }
-    SimpleDateFormat getStartDate() { return this.startDate; }
-    SimpleDateFormat getEndDate() { return this.endDate; }
+    String getStartDate() { return this.startDate; }
+    String getEndDate() { return this.endDate; }
     double getAlarm() { return this.alarm; }
     String getLocation() { return this.location; }
     ArrayList<Attandance> getAttandances() { return this.attandances; }
