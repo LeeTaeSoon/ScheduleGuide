@@ -27,7 +27,7 @@ public class FirebaseHandler {
         uuid = deviceUuidFactory.getDeviceUuid();
 
         database = FirebaseDatabase.getInstance();
-        tagTable = database.getReference("Tag/" + uuid);
+        tagTable = database.getReference(uuid + "Tag/");
     }
 
     public DatabaseReference getTagTable() { return this.tagTable; }
