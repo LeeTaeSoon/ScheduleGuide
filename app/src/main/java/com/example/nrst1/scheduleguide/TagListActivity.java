@@ -40,13 +40,7 @@ public class TagListActivity extends AppCompatActivity {
         firebaseHandler = new FirebaseHandler(getApplicationContext());
         tagTable = firebaseHandler.getTagTable();
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        sideMenuContainer = (FrameLayout) findViewById(R.id.side_bar_fragment_container);
-
-        ActionBarHandler actionBarHandler = new ActionBarHandler(this, getSupportActionBar());
-        actionBarHandler.setBasicActionBar();
-        actionBarHandler.setTitle("태그");
-        actionBarHandler.setDrawerMenu(drawerLayout, sideMenuContainer);
+        initActionBar();
 
         tags = new ArrayList<>();
 
@@ -86,6 +80,16 @@ public class TagListActivity extends AppCompatActivity {
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    public void initActionBar() {
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        sideMenuContainer = (FrameLayout) findViewById(R.id.side_bar_fragment_container);
+
+        ActionBarHandler actionBarHandler = new ActionBarHandler(this, getSupportActionBar());
+        actionBarHandler.setBasicActionBar();
+        actionBarHandler.setTitle("태그");
+        actionBarHandler.setDrawerMenu(drawerLayout, sideMenuContainer);
     }
 
     @Override
