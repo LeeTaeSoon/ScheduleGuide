@@ -16,7 +16,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".TagListActivity" />
-        <activity android:name=".AddScheduleActivity"></activity>
+        <activity android:name=".AddScheduleActivity" />
+        <activity android:name=".ShowScheduleListActivity"></activity>
     </application>
 
 </manifest>
