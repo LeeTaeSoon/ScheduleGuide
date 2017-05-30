@@ -16,6 +16,7 @@ public class FirebaseHandler {
 
     FirebaseDatabase database;
     DatabaseReference tagTable;
+    DatabaseReference scheduleTable;
 
     FirebaseHandler(Context context) {
         this.context = context;
@@ -28,7 +29,10 @@ public class FirebaseHandler {
 
         database = FirebaseDatabase.getInstance();
         tagTable = database.getReference(uuid + "/Tag");
+        scheduleTable = database.getReference(uuid + "/Schedule");
     }
 
     public DatabaseReference getTagTable() { return this.tagTable; }
+    
+    public DatabaseReference getScheduleTable() { return this.scheduleTable; }
 }
