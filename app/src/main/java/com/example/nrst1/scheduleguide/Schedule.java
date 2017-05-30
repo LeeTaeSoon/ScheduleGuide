@@ -8,6 +8,7 @@ import java.util.ArrayList;
  */
 
 public class Schedule {
+    int key;
     int tag;
     String title;
     SimpleDateFormat startDate;
@@ -20,6 +21,7 @@ public class Schedule {
 
     Schedule() {}
     Schedule(int tag, String title, SimpleDateFormat startDate, SimpleDateFormat endDate, double alarm, String location, ArrayList<Attandance> attandances, String color, String memo) {
+        this.key = -1;
         this.tag = tag;
         this.title = title;
         this.startDate = startDate;
@@ -31,6 +33,7 @@ public class Schedule {
         this.memo = memo;
     }
 
+    void setKey(int key) { this.key = key; }
     void setTag(int tag) { this.tag = tag; }
     void setTitle(String title) { this.title = title; }
     void setStartDate(SimpleDateFormat startDate) { this.startDate = startDate; }
@@ -41,6 +44,7 @@ public class Schedule {
     void setColor(String color) { this.color = color; }
     void setMemo(String memo) { this.memo = memo; }
 
+    int getKey() { return this.key; }
     int getTag() { return this.tag; }
     String getTitle() { return this.title; }
     SimpleDateFormat getStartDate() { return this.startDate; }
