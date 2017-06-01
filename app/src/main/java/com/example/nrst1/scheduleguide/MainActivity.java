@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("year",year);
                 intent.putExtra("month",month);
                 intent.putExtra("day",position);        //포지션은 계산하겠지
+                intent.putExtra("dayOfTheWeek",position%7);
                 startActivity(intent);
             }
         });

@@ -187,8 +187,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"/>
 
-                    <EditText
+                    <AutoCompleteTextView
                         android:id="@+id/add_schedule_attendance"
+                        android:completionThreshold="1"
                         android:textSize="15sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -208,12 +209,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"/>
 
-                    <TextView
+                    <Spinner
                         android:id="@+id/add_schedule_color"
-                        android:textSize="15sp"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp" />
+                        android:entries="@array/color"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"></Spinner>
                 </LinearLayout>
 
                 <LinearLayout
@@ -251,6 +251,7 @@
                 <Button
                     android:id="@+id/add_schedule_add_button"
                     android:text="추가"
+                    android:onClick="btnAdd"
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:layout_gravity="center"
@@ -263,6 +264,7 @@
                 <Button
                     android:id="@+id/add_schedule_cancel_button"
                     android:text="취소"
+                    android:onClick="btnCancle"
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:layout_gravity="center"
