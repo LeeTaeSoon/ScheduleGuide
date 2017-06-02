@@ -1,5 +1,8 @@
 package com.example.nrst1.scheduleguide;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -12,10 +15,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,6 +34,10 @@ public class AddScheduleActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     FrameLayout sideMenuContainer;
 
+    final int START_DATE=1;
+    final int START_TIME=2;
+    final int END_DATE=3;
+    final int END_TIME=4;
     int year,month,day,dayOfTheWeek;
     String dayoftheweek;
     Spinner tag;
@@ -124,6 +133,30 @@ public class AddScheduleActivity extends AppCompatActivity {
         endTime=(TextView)findViewById(R.id.add_schedule_end_time);
 
 
+        startDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog(START_DATE);
+            }
+        });
+        startTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog(START_TIME);
+            }
+        });
+        endDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog(END_DATE);
+            }
+        });
+        endTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog(END_TIME);
+            }
+        });
 
         alarm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -246,8 +279,9 @@ public class AddScheduleActivity extends AppCompatActivity {
         String Attend=attend.getText().toString();
         String Memo=memo.getText().toString();
 
-        String startday=year+"-"+month+"-"+day/*+" "+"01:30"*/;
-        String endday=year+"-"+month+"-"+day;//default로 날짜는 오늘날짜
+        String startday=startDate.getText().toString()+" "+startTime.getText().toString();
+                /*+" "+"01:30"*/;
+        String endday=endDate.getText().toString()+" "+endTime.getText().toString();//default로 날짜는 오늘날짜
 
 
         Schedule schedule=new Schedule(selectTag,Title,startday,endday,ringring,Location,Attend,col,Memo);
@@ -305,6 +339,69 @@ public class AddScheduleActivity extends AppCompatActivity {
 
         return contactlist;
 
+    }
+    @Override
+    @Deprecated
+    protected Dialog onCreateDialog(int id) {
+        switch(id){
+            case START_DATE :
+                DatePickerDialog sdpd = new DatePickerDialog
+                        (AddScheduleActivity.this, // 현재화면의 제어권자
+                                new DatePickerDialog.OnDateSetListener() {
+                                    public void onDateSet(DatePicker view,
+                                                          int year, int monthOfYear,int dayOfMonth) {
+                                        startDate.setText(year+"-"+monthOfYear+"-"+dayOfMonth);
+                                    }
+                                }
+                                , // 사용자가 날짜설정 후 다이얼로그 빠져나올때
+                                //    호출할 리스너 등록
+                                2015, 6, 21); // 기본값 연월일
+                return sdpd;
+            case START_TIME :
+                TimePickerDialog stpd =
+                        new TimePickerDialog(AddScheduleActivity.this,
+                                new TimePickerDialog.OnTimeSetListener() {
+                                    @Override
+                                    public void onTimeSet(TimePicker view,
+                                                          int hourOfDay, int minute) {
+                                        startTime.setText(hourOfDay+":"+minute);
+                                    }
+                                }, // 값설정시 호출될 리스너 등록
+                                4,19, false); // 기본값 시분 등록
+                // true : 24 시간(0~23) 표시
+                // false : 오전/오후 항목이 생김
+                return stpd;
+            case END_DATE :
+                DatePickerDialog edpd = new DatePickerDialog
+                        (AddScheduleActivity.this, // 현재화면의 제어권자
+                                new DatePickerDialog.OnDateSetListener() {
+                                    public void onDateSet(DatePicker view,
+                                                          int year, int monthOfYear,int dayOfMonth) {
+                                        endDate.setText(year+"-"+monthOfYear+"-"+dayOfMonth);
+                                    }
+                                }
+                                , // 사용자가 날짜설정 후 다이얼로그 빠져나올때
+                                //    호출할 리스너 등록
+                                2015, 6, 21); // 기본값 연월일
+                return edpd;
+            case END_TIME :
+                TimePickerDialog etpd =
+                        new TimePickerDialog(AddScheduleActivity.this,
+                                new TimePickerDialog.OnTimeSetListener() {
+                                    @Override
+                                    public void onTimeSet(TimePicker view,
+                                                          int hourOfDay, int minute) {
+                                        endTime.setText(hourOfDay+":"+minute);
+                                    }
+                                }, // 값설정시 호출될 리스너 등록
+                                4,19, false); // 기본값 시분 등록
+                // true : 24 시간(0~23) 표시
+                // false : 오전/오후 항목이 생김
+                return etpd;
+        }
+
+
+        return super.onCreateDialog(id);
     }
 
 }
