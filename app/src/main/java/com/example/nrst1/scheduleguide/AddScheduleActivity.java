@@ -44,10 +44,11 @@ public class AddScheduleActivity extends AppCompatActivity {
     TextView endTime;
     TextView endDate;
 
-    int ringring;
-    int col;
+    double ringring;
+    String col;
     ArrayAdapter tagadapter;
-    ArrayList<String> tagList;
+    ArrayList<Tag> tagList;
+    ArrayList<String> tagNameList;
     int selectTag;
 
     ArrayList<Contact> contactList;
@@ -136,19 +137,22 @@ public class AddScheduleActivity extends AppCompatActivity {
             }
         });
         //알람 스피너 설정
-        //Schedule today=new Schedule(Title,startday,endday,Location,Attend,Memo);
 
         FirebaseHandler firebaseHandler=new FirebaseHandler(this);
         DatabaseReference tagdatabase=firebaseHandler.getTagTable();
 
-        tagList=new ArrayList<>();
+        tagNameList=new ArrayList<String>();
+        tagList=new ArrayList<Tag>();
         tagdatabase.addValueEventListener(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot data : dataSnapshot.getChildren()){
                     Tag t=data.getValue(Tag.class);
-                    tagList.add(t.getName());
+                    tagList.add(t);
+                    tagNameList.add(t.getName());
                 }
+                tagadapter=new ArrayAdapter(getApplicationContext(),android.R.layout.simple_spinner_dropdown_item,tagNameList);
+                tag.setAdapter(tagadapter);
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -156,12 +160,11 @@ public class AddScheduleActivity extends AppCompatActivity {
             }
         });
 
-        tagadapter=new ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item,tagList);
-        tag.setAdapter(tagadapter);
+
         tag.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectTag=position;
+                selectTag=tagList.get(position).getKey();
 
             }
 
@@ -191,35 +194,35 @@ public class AddScheduleActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(position==0){
-                    col=-1;
+                    col=String.valueOf(-1);
                 }
                 else if(position==1){
                     view.setBackgroundColor(Color.RED);
-                    col=Color.RED;
+                    col=String.valueOf(Color.RED);
                 }
                 else if(position==2){
                     view.setBackgroundColor(Color.GREEN);
-                    col=Color.GREEN;
+                    col=String.valueOf(Color.GREEN);
                 }
                 else if(position==3){
                     view.setBackgroundColor(Color.BLUE);
-                    col=Color.BLUE;
+                    col=String.valueOf(Color.BLUE);
                 }
                 else if(position==4){
                     view.setBackgroundColor(Color.CYAN);
-                    col=Color.CYAN;
+                    col=String.valueOf(Color.CYAN);
                 }
                 else if(position==5){
                     view.setBackgroundColor(Color.YELLOW);
-                    col=Color.YELLOW;
+                    col=String.valueOf(Color.YELLOW);
                 }
                 else if(position==6){
                     view.setBackgroundColor(Color.MAGENTA);
-                    col=Color.MAGENTA;
+                    col=String.valueOf(Color.MAGENTA);
                 }
                 else{
                     view.setBackgroundColor(Color.BLACK);
-                    col=Color.BLACK;
+                    col=String.valueOf(Color.BLACK);
                 }
             }
 
@@ -243,17 +246,18 @@ public class AddScheduleActivity extends AppCompatActivity {
         String Attend=attend.getText().toString();
         String Memo=memo.getText().toString();
 
-        String startday=year+"-"+month+"-"+day;
+        String startday=year+"-"+month+"-"+day/*+" "+"01:30"*/;
         String endday=year+"-"+month+"-"+day;//default로 날짜는 오늘날짜
 
 
-        //Schedule schedule=new Schedule(selectTag,Title,startday,endday,ringring,Location,Attend,col,Memo);
+        Schedule schedule=new Schedule(selectTag,Title,startday,endday,ringring,Location,Attend,col,Memo);
 
         //이거 이제 디비에 넣으면 됨
-        
+
         FirebaseHandler database=new FirebaseHandler(this);
         DatabaseReference rdatabase=database.getScheduleTable();
-        //rdatabase.setValue(schedule);
+        rdatabase.child(startday).setValue(schedule);
+        finish();
 
     }
 

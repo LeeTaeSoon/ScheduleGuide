@@ -1,7 +1,5 @@
 package com.example.nrst1.scheduleguide;
 
-import java.util.ArrayList;
-
 /**
  * Created by nrst1 on 2017-05-30.
  */
@@ -14,12 +12,12 @@ public class Schedule {
     String endDate;
     double alarm;
     String location;
-    ArrayList<Attandance> attandances;
+    String attandances;
     String color;
     String memo;
 
     Schedule() {}
-    Schedule(int tag, String title, String startDate, String endDate, double alarm, String location, ArrayList<Attandance> attandances, String color, String memo) {
+    Schedule(int tag, String title, String startDate, String endDate, double alarm, String location, String attandances, String color, String memo) {
         this.key = -1;
         this.tag = tag;
         this.title = title;
@@ -39,7 +37,7 @@ public class Schedule {
     void setEndDate(String endDate) { this.endDate = endDate; }
     void setAlarm(double alarm) { this.alarm = alarm; }
     void setLocation(String location) { this.location = location; }
-    void setAttandances(ArrayList<Attandance> attandances) { this.attandances = attandances; }
+    void setAttandances(String attandances) { this.attandances = attandances; }
     void setColor(String color) { this.color = color; }
     void setMemo(String memo) { this.memo = memo; }
 
@@ -50,7 +48,7 @@ public class Schedule {
     String getEndDate() { return this.endDate; }
     double getAlarm() { return this.alarm; }
     String getLocation() { return this.location; }
-    ArrayList<Attandance> getAttandances() { return this.attandances; }
+    String getAttandances() { return this.attandances; }
     String getColor() { return this.color; }
     String getMemo() { return this.memo; }
 }
