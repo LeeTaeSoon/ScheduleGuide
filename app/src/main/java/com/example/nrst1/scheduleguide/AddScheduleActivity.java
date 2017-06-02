@@ -342,7 +342,7 @@ public class AddScheduleActivity extends AppCompatActivity {
     }
     @Override
     @Deprecated
-    protected Dialog onCreateDialog(int id) {
+    protected Dialog onCreateDialog(int id) {           //날짜시간 다이얼로그만들기
         switch(id){
             case START_DATE :
                 DatePickerDialog sdpd = new DatePickerDialog
@@ -350,12 +350,13 @@ public class AddScheduleActivity extends AppCompatActivity {
                                 new DatePickerDialog.OnDateSetListener() {
                                     public void onDateSet(DatePicker view,
                                                           int year, int monthOfYear,int dayOfMonth) {
+                                        monthOfYear+=1;
                                         startDate.setText(year+"-"+monthOfYear+"-"+dayOfMonth);
                                     }
                                 }
                                 , // 사용자가 날짜설정 후 다이얼로그 빠져나올때
                                 //    호출할 리스너 등록
-                                2015, 6, 21); // 기본값 연월일
+                                2017, 6, 1); // 기본값 연월일
                 return sdpd;
             case START_TIME :
                 TimePickerDialog stpd =
@@ -367,7 +368,7 @@ public class AddScheduleActivity extends AppCompatActivity {
                                         startTime.setText(hourOfDay+":"+minute);
                                     }
                                 }, // 값설정시 호출될 리스너 등록
-                                4,19, false); // 기본값 시분 등록
+                                9,00, false); // 기본값 시분 등록
                 // true : 24 시간(0~23) 표시
                 // false : 오전/오후 항목이 생김
                 return stpd;
@@ -377,12 +378,13 @@ public class AddScheduleActivity extends AppCompatActivity {
                                 new DatePickerDialog.OnDateSetListener() {
                                     public void onDateSet(DatePicker view,
                                                           int year, int monthOfYear,int dayOfMonth) {
+                                        monthOfYear+=1;
                                         endDate.setText(year+"-"+monthOfYear+"-"+dayOfMonth);
                                     }
                                 }
                                 , // 사용자가 날짜설정 후 다이얼로그 빠져나올때
                                 //    호출할 리스너 등록
-                                2015, 6, 21); // 기본값 연월일
+                                2017, 6, 1); // 기본값 연월일
                 return edpd;
             case END_TIME :
                 TimePickerDialog etpd =
@@ -394,7 +396,7 @@ public class AddScheduleActivity extends AppCompatActivity {
                                         endTime.setText(hourOfDay+":"+minute);
                                     }
                                 }, // 값설정시 호출될 리스너 등록
-                                4,19, false); // 기본값 시분 등록
+                                9,00, false); // 기본값 시분 등록
                 // true : 24 시간(0~23) 표시
                 // false : 오전/오후 항목이 생김
                 return etpd;
