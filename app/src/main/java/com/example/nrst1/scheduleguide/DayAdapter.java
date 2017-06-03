@@ -18,12 +18,14 @@ import java.util.ArrayList;
 public class DayAdapter extends BaseAdapter {
     Context context;
     ArrayList<Day> days;
+    ArrayList<Schedule> schedules;
 
     int dayIndex;
 
-    public DayAdapter(Context context, ArrayList<Day> days) {
+    public DayAdapter(Context context, ArrayList<Day> days, ArrayList<Schedule> schedules) {
         this.context = context;
         this.days = days;
+        this.schedules = schedules;
 
         dayIndex = 0;
     }
@@ -65,6 +67,11 @@ public class DayAdapter extends BaseAdapter {
                     dayView.setText(String.valueOf(day.getDay()));
                     dayIndex++;
                 }
+            }
+
+            if(scheduleList != null) {
+                ScheduleSimpleAdapter adapter = new ScheduleSimpleAdapter(context, schedules, dayIndex);
+                scheduleList.setAdapter(adapter);
             }
         }
 

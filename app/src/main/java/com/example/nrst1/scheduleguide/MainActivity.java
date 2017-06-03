@@ -10,6 +10,11 @@ import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.Spinner;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     Spinner spinner_month;
     int year;
     int month;
+
+    ArrayList<Schedule> schedules;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +48,9 @@ public class MainActivity extends AppCompatActivity {
         actionBarHandler.setDrawerMenu(drawerLayout, sideMenuContainer);
     }
 
-    public void init(){
+    public void init() {
+        year = 2017;
+
         spinner_year=(Spinner)findViewById(R.id.year);
         spinner_year.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -54,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
                 year=2017;
             }
         });
+
+        month = 6;
         spinner_month=(Spinner)findViewById(R.id.month);
         spinner_month.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -72,9 +83,13 @@ public class MainActivity extends AppCompatActivity {
             days.add(day);
         }
 
+        schedules = new ArrayList<>();
+
         calanderGrid = (GridView) findViewById(R.id.grid_calander);
-        DayAdapter dayAdapter = new DayAdapter(this, days);
+        DayAdapter dayAdapter = new DayAdapter(this, days, schedules);
         calanderGrid.setAdapter(dayAdapter);
+
+        getSchedules(dayAdapter);
 
         // TODO : 선택한 날짜에 일정이 있으면 일정 목록 페이지로 이동하도록 분기 처리
         calanderGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -87,6 +102,32 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("day",position);        //포지션은 계산하겠지
                 intent.putExtra("dayOfTheWeek",position%7);
                 startActivity(intent);
+            }
+        });
+    }
+
+    public void getSchedules(final DayAdapter dayAdapter) {
+        FirebaseHandler firebaseHandler = new FirebaseHandler(this);
+        DatabaseReference scheduleTable = firebaseHandler.getScheduleTable();
+
+        scheduleTable.child(String.valueOf(year)).child(String.valueOf(month)).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                schedules.clear();
+
+                for(DataSnapshot dayData : dataSnapshot.getChildren()) {
+                    for(DataSnapshot data : dayData.getChildren()) {
+                        Schedule schedule = data.getValue(Schedule.class);
+                        schedules.add(schedule);
+                    }
+                }
+
+                dayAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }
