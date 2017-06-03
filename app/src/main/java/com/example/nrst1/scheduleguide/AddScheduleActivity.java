@@ -38,7 +38,7 @@ public class AddScheduleActivity extends AppCompatActivity {
     final int START_TIME=2;
     final int END_DATE=3;
     final int END_TIME=4;
-    int year,month,day,dayOfTheWeek;
+    int startYear,startMonth,startDay,startDayOfWeek,endYear,endMonth,endDay,endDayOfWeek;
     String dayoftheweek;
     Spinner tag;
     EditText title;
@@ -90,11 +90,15 @@ public class AddScheduleActivity extends AppCompatActivity {
 
     public void init(){
         Intent intent=getIntent();
-        year=intent.getIntExtra("year",-1);
-        month=intent.getIntExtra("month",-1);
-        day=intent.getIntExtra("day",-1);
-        dayOfTheWeek=intent.getIntExtra("dayOfTheWeek",-1);
-        switch (dayOfTheWeek){
+        startYear=intent.getIntExtra("year",-1);
+        endYear=startYear;
+        startMonth=intent.getIntExtra("month",-1);
+        endMonth=startMonth;
+        startDay=intent.getIntExtra("day",-1);
+        endDay=startDay;
+        startDayOfWeek=intent.getIntExtra("dayOfTheWeek",-1);
+        endDayOfWeek=startDayOfWeek;
+        switch (startDayOfWeek){
             case 0:
                 dayoftheweek="일";
                 break;
@@ -290,7 +294,7 @@ public class AddScheduleActivity extends AppCompatActivity {
 
         FirebaseHandler database=new FirebaseHandler(this);
         DatabaseReference rdatabase=database.getScheduleTable();
-        rdatabase.child(startday).setValue(schedule);
+        rdatabase.child(startYear+"/"+startMonth+"/"+startDay).setValue(schedule);
         finish();
 
     }
@@ -351,6 +355,9 @@ public class AddScheduleActivity extends AppCompatActivity {
                                     public void onDateSet(DatePicker view,
                                                           int year, int monthOfYear,int dayOfMonth) {
                                         monthOfYear+=1;
+                                        startYear=year;
+                                        startMonth=monthOfYear;
+                                        startDay=dayOfMonth;
                                         startDate.setText(year+"-"+monthOfYear+"-"+dayOfMonth);
                                     }
                                 }
@@ -379,6 +386,9 @@ public class AddScheduleActivity extends AppCompatActivity {
                                     public void onDateSet(DatePicker view,
                                                           int year, int monthOfYear,int dayOfMonth) {
                                         monthOfYear+=1;
+                                        endYear=year;
+                                        endMonth=monthOfYear;
+                                        endDay=dayOfMonth;
                                         endDate.setText(year+"-"+monthOfYear+"-"+dayOfMonth);
                                     }
                                 }
