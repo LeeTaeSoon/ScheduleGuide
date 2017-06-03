@@ -15,9 +15,11 @@ public class FirebaseHandler {
     static String uuid;
 
     FirebaseDatabase database;
+    DatabaseReference calanderTable;
     DatabaseReference tagTable;
     DatabaseReference scheduleTable;
 
+    FirebaseHandler()  {}
     FirebaseHandler(Context context) {
         this.context = context;
         setFirebase();
@@ -28,9 +30,12 @@ public class FirebaseHandler {
         uuid = deviceUuidFactory.getDeviceUuid();
 
         database = FirebaseDatabase.getInstance();
+        calanderTable = database.getReference("Calander");
         tagTable = database.getReference(uuid + "/Tag");
         scheduleTable = database.getReference(uuid + "/Schedule");
     }
+
+    public DatabaseReference getCalanderTable() { return this.calanderTable; }
 
     public DatabaseReference getTagTable() { return this.tagTable; }
     
