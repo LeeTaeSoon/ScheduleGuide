@@ -20,6 +20,10 @@ import java.util.ArrayList;
 
 public class ShowScheduleListActivity extends AppCompatActivity {
 
+    int year;
+    int month;
+    int day;
+
     DrawerLayout drawerLayout;
     FrameLayout sideMenuContainer;
     ImageView addScheduleImg;
@@ -39,6 +43,11 @@ public class ShowScheduleListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show_schedule_list);
 
         initActionBar();
+
+        Intent intent = getIntent();
+        year = intent.getIntExtra("year", -1);
+        month = intent.getIntExtra("month", -1);
+        day = intent.getIntExtra("day", -1);
 
         schedules = new ArrayList<>();
 
@@ -76,7 +85,7 @@ public class ShowScheduleListActivity extends AppCompatActivity {
                 final int position = viewHolder.getAdapterPosition();
 
                 // TODO : 삭제 테스트 필요 ( 데이터 만들기 힘들어서 테스트 안해봄 )
-                scheduleTable.child(String.valueOf(schedules.get(position).getKey())).removeValue();
+                scheduleTable.child(String.valueOf(year)).child(String.valueOf(month)).child(String.valueOf(day)).child(String.valueOf(schedules.get(position).getKey())).removeValue();
                 schedules.remove(position);
                 scheduleAdapter.notifyItemRemoved(position);
             }
@@ -99,7 +108,7 @@ public class ShowScheduleListActivity extends AppCompatActivity {
     }
 
     public void setScheduleTable() {
-        scheduleTable.orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
+        scheduleTable.child(String.valueOf(year)).child(String.valueOf(month)).child(String.valueOf(day)).orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 schedules.clear();
