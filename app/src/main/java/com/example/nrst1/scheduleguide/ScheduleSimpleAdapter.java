@@ -8,11 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by nrst1 on 2017-06-03.
@@ -35,7 +31,14 @@ public class ScheduleSimpleAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return schedules.size();
+        if (schedules.size() == 0) return 0;
+
+        final Schedule schedule = schedules.get(scheduleIndex);
+
+        int scheduleDay = new Day().getDayFromString(schedule.getStartDate());
+
+        if (day == scheduleDay) return schedules.size();
+        else return 0;
     }
 
     @Override
@@ -60,28 +63,21 @@ public class ScheduleSimpleAdapter extends BaseAdapter {
         if (day == 0) return v;
         if (day == 1) scheduleIndex = 0;
 
-        final Schedule schedule = schedules.get(position);
+        final Schedule schedule = schedules.get(scheduleIndex);
 
         if(schedule != null) {
-            try {
-                Date date = new SimpleDateFormat("yyyy-mm-dd HH:mm").parse(schedule.getStartDate());
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date);
+            if (day == new Day().getDayFromString(schedule.getStartDate())) {
+                TextView name = (TextView) v.findViewById(R.id.schedule_simple_text);
 
-                if (day == calendar.get(Calendar.DAY_OF_MONTH)) {
-                    TextView name = (TextView) v.findViewById(R.id.schedule_simple_text);
-
-                    if (name != null) {
-                        name.setText(schedule.getTitle());
-                        StringBuffer stringBuffer = new StringBuffer(schedule.getColor());
-                        String color = stringBuffer.insert(1, "88").toString();
-                        name.setBackgroundColor(Color.parseColor(color));
-                    }
-
-                    scheduleIndex++;
+                if (name != null) {
+                    name.setText(schedule.getTitle());
+                    StringBuffer stringBuffer = new StringBuffer(schedule.getColor());
+                    String color = stringBuffer.insert(1, "88").toString();
+                    name.setBackgroundColor(Color.parseColor(color));
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
+
+                scheduleIndex++;
+                scheduleIndex %= schedules.size();
             }
         }
 
