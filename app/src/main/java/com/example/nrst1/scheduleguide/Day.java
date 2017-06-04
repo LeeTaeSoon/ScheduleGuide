@@ -8,6 +8,11 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Created by nrst1 on 2017-05-25.
  */
@@ -18,6 +23,7 @@ public class Day {
     int day;
     int dayOfTheWeek;
 
+    Day() {}
     Day(int year, int month, int day, int dayOfTheWeek) {
         this.year = year;
         this.month = month;
@@ -65,5 +71,19 @@ public class Day {
         dayOfTheWeek = dayOfTheWeek + first[0] % 7;
 
         return dayOfTheWeek;
+    }
+
+    public int getDayFromString(String date) {
+        try {
+            Date d = new SimpleDateFormat("yyyy-mm-dd HH:mm").parse(date);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(d);
+
+            return calendar.get(Calendar.DAY_OF_MONTH);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return -1;
     }
 }
