@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 year=2017;
             }
         });
+        spinner_year.setSelection(0);
 
         month = 6;
         spinner_month=(Spinner)findViewById(R.id.month);
@@ -77,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 month=6;
             }
         });
+        spinner_month.setSelection(5);
         ArrayList<Day> days = new ArrayList<>();            //여기서 day계산이 필요하다
         for(int i = 1 ; i < 32; i++) {
             Day day = new Day(2017, 5, i, i % 7);
@@ -91,15 +94,32 @@ public class MainActivity extends AppCompatActivity {
 
         getSchedules(dayAdapter);
 
-        // TODO : 선택한 날짜에 일정이 있으면 일정 목록 페이지로 이동하도록 분기 처리
         calanderGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //여기서 그리드뷰의 position은 1번째가 0부터 시작한다
-                Intent intent = new Intent(getApplication(), AddScheduleActivity.class);
+                TextView dayText = (TextView) view.findViewById(R.id.day);
+                if (dayText.getText().toString() == "") return;
+
+                int nowDay = Integer.valueOf(dayText.getText().toString());
+
+                Intent intent = null;
+                if (schedules.size() == 0) intent = new Intent(getApplication(), AddScheduleActivity.class);
+                else {
+                    for(int i = 0 ; i < schedules.size(); i++) {
+                        int day = new Day().getDayFromString(schedules.get(i).getStartDate());
+                        if (nowDay == day) {
+                            intent = new Intent(getApplication(), ShowScheduleListActivity.class);
+                            break;
+                        }
+                    }
+
+                    if (intent == null)
+                        intent = new Intent(getApplication(), AddScheduleActivity.class);
+                }
+
                 intent.putExtra("year",year);
                 intent.putExtra("month",month);
-                intent.putExtra("day",position);        //포지션은 계산하겠지
+                intent.putExtra("day", nowDay);
                 intent.putExtra("dayOfTheWeek",position%7);
                 startActivity(intent);
             }
