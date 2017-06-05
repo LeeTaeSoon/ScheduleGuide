@@ -11,19 +11,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
-
-        </activity>
-        <activity android:name=".TagListActivity" />
-        <activity android:name=".AddScheduleActivity" />
-        <activity android:name=".ShowScheduleListActivity" />
-        <activity android:name=".UpdateSchedule" />
-        <activity android:name=".DetailSchedule">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        </activity>
+        <activity android:name=".TagListActivity" />
+        <activity android:name=".AddScheduleActivity" />
+        <activity android:name=".ShowScheduleListActivity" />
+        <activity android:name=".UpdateSchedule" />
+        <activity android:name=".DetailSchedule">
+
     </application>
+
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.DIAL_PHONE" />
 
 </manifest>
