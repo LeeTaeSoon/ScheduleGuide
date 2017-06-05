@@ -232,7 +232,7 @@ public class AddScheduleActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(position==0){
-                    col=String.valueOf(-1);
+                    col = "#FFFFFF";
                 }
                 else if(position==1){
                     view.setBackgroundColor(Color.RED);
@@ -291,16 +291,8 @@ public class AddScheduleActivity extends AppCompatActivity {
 
         final Schedule schedule = new Schedule(selectTag, Title, startday, endday, ringring, Location, Attend, col, Memo);
 
-        //이거 이제 디비에 넣으면 됨
-
-        FirebaseHandler database=new FirebaseHandler(this);
-        DatabaseReference rdatabase=database.getScheduleTable();
         //TODO 여기다가 번호추가
-
-
-        rdatabase.child(startYear+"/"+startMonth+"/"+startDay).setValue(schedule);
-        finish();
-
+        FirebaseHandler database = new FirebaseHandler(this);
         final DatabaseReference scheduleTable = database.getScheduleTable();
 
         new Schedule().getDaySchedulesSingle(startYear, startMonth, startDay, new Schedule.ScheduleCallback() {
