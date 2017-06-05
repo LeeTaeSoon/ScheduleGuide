@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -165,7 +166,7 @@ public class AddScheduleActivity extends AppCompatActivity {
         alarm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ringring=(position+1)*30;//분
+                ringring=(position+1)*0.5;//분
             }
 
             @Override
@@ -294,12 +295,21 @@ public class AddScheduleActivity extends AppCompatActivity {
 
         FirebaseHandler database=new FirebaseHandler(this);
         DatabaseReference rdatabase=database.getScheduleTable();
+        //TODO 여기다가 번호추가
+
+
         rdatabase.child(startYear+"/"+startMonth+"/"+startDay).setValue(schedule);
         finish();
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
     private ArrayList<Contact> getContactList() {
+
 
         Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
 
@@ -363,7 +373,7 @@ public class AddScheduleActivity extends AppCompatActivity {
                                 }
                                 , // 사용자가 날짜설정 후 다이얼로그 빠져나올때
                                 //    호출할 리스너 등록
-                                2017, 6, 1); // 기본값 연월일
+                                2017, 05, 01); // 기본값 연월일
                 return sdpd;
             case START_TIME :
                 TimePickerDialog stpd =
@@ -394,7 +404,7 @@ public class AddScheduleActivity extends AppCompatActivity {
                                 }
                                 , // 사용자가 날짜설정 후 다이얼로그 빠져나올때
                                 //    호출할 리스너 등록
-                                2017, 6, 1); // 기본값 연월일
+                                2017, 05, 01); // 기본값 연월일
                 return edpd;
             case END_TIME :
                 TimePickerDialog etpd =
