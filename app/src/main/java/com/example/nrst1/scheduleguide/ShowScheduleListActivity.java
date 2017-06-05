@@ -60,6 +60,9 @@ public class ShowScheduleListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // TODO : 현재 날짜 정보 보내기
                 Intent intent = new Intent(getApplication(), AddScheduleActivity.class);
+                intent.putExtra("year", year);
+                intent.putExtra("month", month);
+                intent.putExtra("day", day);
                 startActivity(intent);
             }
         });
