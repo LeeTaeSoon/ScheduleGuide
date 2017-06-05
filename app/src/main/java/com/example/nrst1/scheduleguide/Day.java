@@ -41,19 +41,27 @@ public class Day {
     int getDay() { return this.day; }
     int getDayOfTheWeek() { return this.dayOfTheWeek; }
 
-    public int getDayOfTheWeek(int year, int month, int day) {
+    public interface DayCallback {
+        public void getMonthInfo(int first, int num);
+    }
+
+    public void getMonthInfo(int year, int month, final int day, final DayCallback callback) {
         FirebaseHandler firebaseHandler = new FirebaseHandler();
         firebaseHandler.setFirebase();
         DatabaseReference calenderTable = firebaseHandler.getCalanderTable();
-
-        final int[] first = {-1};
 
         calenderTable.child(String.valueOf(year)).child(String.valueOf(month)).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
-                    JSONObject day = new JSONObject(dataSnapshot.toString());
-                    first[0] = day.getInt(String.valueOf("1"));
+                    JSONObject dayInfo = new JSONObject(dataSnapshot.getValue().toString());
+                    int first = dayInfo.getInt("first");
+                    int dayNum = dayInfo.getInt("num");
+
+                    int dayOfTheWeek = day - 1;
+                    dayOfTheWeek = dayOfTheWeek + first % 7;
+
+                    callback.getMonthInfo(dayOfTheWeek, dayNum);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -64,26 +72,19 @@ public class Day {
 
             }
         });
-
-        while (first[0] == -1);
-
-        int dayOfTheWeek = day - 1;
-        dayOfTheWeek = dayOfTheWeek + first[0] % 7;
-
-        return dayOfTheWeek;
     }
 
-    public int getDayFromString(String date) {
+    public Calendar getDateFromString(String date) {
         try {
-            Date d = new SimpleDateFormat("yyyy-mm-dd HH:mm").parse(date);
+            Date d = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(date);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(d);
 
-            return calendar.get(Calendar.DAY_OF_MONTH);
+            return calendar;
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        return -1;
+        return null;
     }
 }
