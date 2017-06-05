@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     int month;
 
     ArrayList<Schedule> schedules;
+    ArrayList<Day> days;
+    DayAdapter dayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +54,37 @@ public class MainActivity extends AppCompatActivity {
 
     public void init() {
         year = 2017;
+        month = 6;
+
+        days = new ArrayList<>();
+        for(int i = 1 ; i < 31; i++) {
+            Day day = new Day(year, month, i, (i + 3) % 7);
+            days.add(day);
+        }
+
+        schedules = new ArrayList<>();
+        calanderGrid = (GridView) findViewById(R.id.grid_calander);
+        dayAdapter = new DayAdapter(this, days, schedules);
+        calanderGrid.setAdapter(dayAdapter);
 
         spinner_year=(Spinner)findViewById(R.id.year);
         spinner_year.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 year=position+2017;
+
+                new Day().getMonthInfo(year, month, 1, new Day.DayCallback() {
+                    @Override
+                    public void getMonthInfo(int dayOfTheWeek, int dayNum) {
+                        days.clear();
+                        for(int i = 1 ; i < dayNum + 1; i++) {
+                            Day day = new Day(year, month, i, (i + dayOfTheWeek - 1) % 7);
+                            days.add(day);
+                        }
+
+                        dayAdapter.notifyDataSetChanged();
+                    }
+                });
             }
 
             @Override
@@ -66,12 +94,24 @@ public class MainActivity extends AppCompatActivity {
         });
         spinner_year.setSelection(0);
 
-        month = 6;
         spinner_month=(Spinner)findViewById(R.id.month);
         spinner_month.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 month=position+1;
+
+                new Day().getMonthInfo(year, month, 1, new Day.DayCallback() {
+                    @Override
+                    public void getMonthInfo(int dayOfTheWeek, int dayNum) {
+                        days.clear();
+                        for(int i = 1 ; i < dayNum + 1; i++) {
+                            Day day = new Day(year, month, i, (i + dayOfTheWeek - 1) % 7);
+                            days.add(day);
+                        }
+
+                        dayAdapter.notifyDataSetChanged();
+                    }
+                });
             }
 
             @Override
@@ -80,17 +120,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         spinner_month.setSelection(5);
-        ArrayList<Day> days = new ArrayList<>();            //여기서 day계산이 필요하다
-        for(int i = 1 ; i < 32; i++) {
-            Day day = new Day(2017, 5, i, i % 7);
-            days.add(day);
-        }
-
-        schedules = new ArrayList<>();
-
-        calanderGrid = (GridView) findViewById(R.id.grid_calander);
-        DayAdapter dayAdapter = new DayAdapter(this, days, schedules);
-        calanderGrid.setAdapter(dayAdapter);
 
         getSchedules(dayAdapter);
 
@@ -106,7 +135,8 @@ public class MainActivity extends AppCompatActivity {
                 if (schedules.size() == 0) intent = new Intent(getApplication(), AddScheduleActivity.class);
                 else {
                     for(int i = 0 ; i < schedules.size(); i++) {
-                        int day = new Day().getDayFromString(schedules.get(i).getStartDate());
+                        Calendar calendar = new Day().getDateFromString(schedules.get(i).getStartDate());
+                        int day = calendar.get(Calendar.DAY_OF_MONTH);
                         if (nowDay == day) {
                             intent = new Intent(getApplication(), ShowScheduleListActivity.class);
                             break;
