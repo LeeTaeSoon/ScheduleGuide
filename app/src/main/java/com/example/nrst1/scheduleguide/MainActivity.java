@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                             days.add(day);
                         }
 
-                        dayAdapter.notifyDataSetChanged();
+                        getSchedules(dayAdapter);
                     }
                 });
             }
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                             days.add(day);
                         }
 
-                        dayAdapter.notifyDataSetChanged();
+                        getSchedules(dayAdapter);
                     }
                 });
             }
