@@ -32,7 +32,7 @@ public class DayAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return days.size();
+        return days.size() + days.get(0).getDayOfTheWeek();
     }
 
     @Override
@@ -66,12 +66,14 @@ public class DayAdapter extends BaseAdapter {
                 if (day.getDayOfTheWeek() == position % 7) {
                     dayView.setText(String.valueOf(day.getDay()));
                     dayIndex++;
-                }
+                } else dayView.setText("");
             }
 
             if(scheduleList != null) {
-                ScheduleSimpleAdapter adapter = new ScheduleSimpleAdapter(context, schedules, dayIndex);
-                scheduleList.setAdapter(adapter);
+                if (dayIndex > 0) {
+                    ScheduleSimpleAdapter adapter = new ScheduleSimpleAdapter(context, schedules, days.get(dayIndex - 1));
+                    scheduleList.setAdapter(adapter);
+                }
             }
         }
 
