@@ -1,5 +1,12 @@
 package com.example.nrst1.scheduleguide;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+
 /**
  * Created by nrst1 on 2017-05-30.
  */
@@ -51,4 +58,68 @@ public class Schedule {
     String getAttandances() { return this.attandances; }
     String getColor() { return this.color; }
     String getMemo() { return this.memo; }
+
+    public interface ScheduleCallback {
+        public void getSchedules(ArrayList<Schedule> schedules);
+    }
+
+    /*
+     *   year/month
+     *   addValueEventListner
+     */
+    public void getMonthSchedules(int year, int month, final ScheduleCallback callback) {
+        FirebaseHandler firebaseHandler = new FirebaseHandler();
+        firebaseHandler.setFirebase();
+        DatabaseReference scheduleTable = firebaseHandler.getScheduleTable();
+
+        final ArrayList<Schedule> schedules = new ArrayList<>();
+
+        scheduleTable.child(String.valueOf(year)).child(String.valueOf(month)).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot dayData : dataSnapshot.getChildren()) {
+                    for(DataSnapshot data : dayData.getChildren()) {
+                        Schedule schedule = data.getValue(Schedule.class);
+                        schedules.add(schedule);
+                    }
+                }
+
+                callback.getSchedules(schedules);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    /*
+     *  year/month/day
+     *  addListenerForSingleValueEvent
+     */
+    public void getDaySchedulesSingle(int year, int month, int day, final ScheduleCallback callback) {
+        FirebaseHandler firebaseHandler = new FirebaseHandler();
+        firebaseHandler.setFirebase();
+        DatabaseReference scheduleTable = firebaseHandler.getScheduleTable();
+
+        final ArrayList<Schedule> schedules = new ArrayList<>();
+
+        scheduleTable.child(String.valueOf(year)).child(String.valueOf(month)).child(String.valueOf(day)).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot data : dataSnapshot.getChildren()) {
+                    Schedule schedule = data.getValue(Schedule.class);
+                    schedules.add(schedule);
+                }
+
+                callback.getSchedules(schedules);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 }
