@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by nrst1 on 2017-06-03.
@@ -17,11 +18,11 @@ import java.util.ArrayList;
 public class ScheduleSimpleAdapter extends BaseAdapter {
     Context context;
     ArrayList<Schedule> schedules;
-    int day;
+    Day day;
     int scheduleIndex;
 
     ScheduleSimpleAdapter() {}
-    ScheduleSimpleAdapter(Context context, ArrayList<Schedule> schedules, int day) {
+    ScheduleSimpleAdapter(Context context, ArrayList<Schedule> schedules, Day day) {
         this.context = context;
         this.schedules = schedules;
         this.day = day;
@@ -33,12 +34,20 @@ public class ScheduleSimpleAdapter extends BaseAdapter {
     public int getCount() {
         if (schedules.size() == 0) return 0;
 
-        final Schedule schedule = schedules.get(scheduleIndex);
+        int num = 0;
 
-        int scheduleDay = new Day().getDayFromString(schedule.getStartDate());
+        for (int i =0 ; i < schedules.size(); i++) {
+            Schedule schedule = schedules.get(i);
 
-        if (day == scheduleDay) return schedules.size();
-        else return 0;
+            Calendar calendar = new Day().getDateFromString(schedule.getStartDate());
+            int scheduleMonth = calendar.get(Calendar.MONTH) + 1;
+            int scheduleDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+            if (day.getMonth() == scheduleMonth && day.getDay() == scheduleDay)
+                num++;
+        }
+
+         return num;
     }
 
     @Override
@@ -60,13 +69,17 @@ public class ScheduleSimpleAdapter extends BaseAdapter {
             v = vi.inflate(R.layout.schedule_simple_list_row, null);
         }
 
-        if (day == 0) return v;
-        if (day == 1) scheduleIndex = 0;
+        if (day.getDay() == 0) return v;
+        if (day.getDay() == 1) scheduleIndex = 0;
 
         final Schedule schedule = schedules.get(scheduleIndex);
 
         if(schedule != null) {
-            if (day == new Day().getDayFromString(schedule.getStartDate())) {
+            Calendar calendar = new Day().getDateFromString(schedule.getStartDate());
+            int scheduleMonth = calendar.get(Calendar.MONTH) + 1;
+            int scheduleDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+            if (day.getMonth() == scheduleMonth && day.getDay() == scheduleDay) {
                 TextView name = (TextView) v.findViewById(R.id.schedule_simple_text);
 
                 if (name != null) {
