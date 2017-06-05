@@ -1,10 +1,11 @@
 package com.example.nrst1.scheduleguide;
 
 /**
- * Created by nrst1 on 2017-05-26.
+ * Created by AhnJeongHyeon on 2017. 6. 6..
  */
 
 public class Tag {
+
     int key;
     String name;
     String color;

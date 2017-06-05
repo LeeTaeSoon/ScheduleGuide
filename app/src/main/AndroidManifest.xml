@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.nrst1.scheduleguide">
 
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,9 +19,9 @@
         </activity>
         <activity android:name=".TagListActivity" />
         <activity android:name=".AddScheduleActivity" />
-        <activity android:name=".ShowScheduleListActivity"></activity>
-
+        <activity android:name=".ShowScheduleListActivity" />
+        <activity android:name=".ScheduleUpdate" />
+        <activity android:name=".UpdateSchedule"></activity>
     </application>
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
 </manifest>
