@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
@@ -30,8 +29,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-
-import static android.R.attr.tag;
 
 public class UpdateSchedule extends AppCompatActivity {
 
@@ -59,7 +56,7 @@ public class UpdateSchedule extends AppCompatActivity {
     double ringring;
     String col;
     ArrayAdapter tagadapter;
-    ArrayList<Tag> tagList;
+    ArrayList<com.example.nrst1.scheduleguide.Tag> tagList;
     ArrayList<String> tagNameList;
     int selectTag;
 
@@ -133,7 +130,7 @@ public class UpdateSchedule extends AppCompatActivity {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 int keyNum=0;
                                 for(DataSnapshot data:dataSnapshot.getChildren()){
-                                    Tag tag1=data.getValue(Tag.class);
+                                    com.example.nrst1.scheduleguide.Tag tag1=data.getValue(com.example.nrst1.scheduleguide.Tag.class);
                                     if(tag1.getKey()==schedule.getTag()){
                                         selectTag=keyNum;
                                         tagSpinner.setSelection(selectTag);
@@ -221,16 +218,17 @@ public class UpdateSchedule extends AppCompatActivity {
         DatabaseReference tagdatabase=firebaseHandler.getTagTable();
 
         tagNameList=new ArrayList<String>();
-        tagList=new ArrayList<Tag>();
+        tagList=new ArrayList<>();
         tagdatabase.addValueEventListener(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot data : dataSnapshot.getChildren()){
 
-                    Tag t=data.getValue(Tag.class);
+                    com.example.nrst1.scheduleguide.Tag t=data.getValue(com.example.nrst1.scheduleguide.Tag.class);
 
                     tagList.add(t);
                     tagNameList.add(t.getName());
+
                 }
                 tagadapter=new ArrayAdapter(getApplicationContext(),android.R.layout.simple_spinner_dropdown_item,tagNameList);
                 tagSpinner.setAdapter(tagadapter);
