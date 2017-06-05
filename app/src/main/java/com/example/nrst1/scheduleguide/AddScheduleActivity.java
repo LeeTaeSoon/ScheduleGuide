@@ -235,31 +235,31 @@ public class AddScheduleActivity extends AppCompatActivity {
                 }
                 else if(position==1){
                     view.setBackgroundColor(Color.RED);
-                    col=String.valueOf(Color.RED);
+                    col = "#FF0000";
                 }
                 else if(position==2){
                     view.setBackgroundColor(Color.GREEN);
-                    col=String.valueOf(Color.GREEN);
+                    col = "#00FF00";
                 }
                 else if(position==3){
                     view.setBackgroundColor(Color.BLUE);
-                    col=String.valueOf(Color.BLUE);
+                    col = "#0000FF";
                 }
                 else if(position==4){
                     view.setBackgroundColor(Color.CYAN);
-                    col=String.valueOf(Color.CYAN);
+                    col = "#00FFFF";
                 }
                 else if(position==5){
                     view.setBackgroundColor(Color.YELLOW);
-                    col=String.valueOf(Color.YELLOW);
+                    col = "#FFFF00";
                 }
                 else if(position==6){
                     view.setBackgroundColor(Color.MAGENTA);
-                    col=String.valueOf(Color.MAGENTA);
+                    col = "#FF00FF";
                 }
                 else{
                     view.setBackgroundColor(Color.BLACK);
-                    col=String.valueOf(Color.BLACK);
+                    col = "#000000";
                 }
             }
 
@@ -283,20 +283,33 @@ public class AddScheduleActivity extends AppCompatActivity {
         String Attend=attend.getText().toString();
         String Memo=memo.getText().toString();
 
-        String startday=startDate.getText().toString()+" "+startTime.getText().toString();
+        final String startday = startDate.getText().toString() + " " + startTime.getText().toString();
                 /*+" "+"01:30"*/;
         String endday=endDate.getText().toString()+" "+endTime.getText().toString();//default로 날짜는 오늘날짜
 
 
-        Schedule schedule=new Schedule(selectTag,Title,startday,endday,ringring,Location,Attend,col,Memo);
+        final Schedule schedule = new Schedule(selectTag, Title, startday, endday, ringring, Location, Attend, col, Memo);
 
         //이거 이제 디비에 넣으면 됨
 
-        FirebaseHandler database=new FirebaseHandler(this);
-        DatabaseReference rdatabase=database.getScheduleTable();
-        rdatabase.child(startYear+"/"+startMonth+"/"+startDay).setValue(schedule);
-        finish();
+        FirebaseHandler database = new FirebaseHandler(this);
+        final DatabaseReference scheduleTable = database.getScheduleTable();
 
+        new Schedule().getDaySchedulesSingle(startYear, startMonth, startDay, new Schedule.ScheduleCallback() {
+            @Override
+            public void getSchedules(ArrayList<Schedule> schedules) {
+                int scheduleNum = schedules.size();
+                if (scheduleNum == 0) {
+                    schedule.setKey(0);
+                    scheduleTable.child(String.valueOf(startYear)).child(String.valueOf(startMonth)).child(String.valueOf(startDay)).child("0").setValue(schedule);
+                } else {
+                    schedule.setKey(schedules.get(scheduleNum - 1).getKey() + 1);
+                    scheduleTable.child(String.valueOf(startYear)).child(String.valueOf(startMonth)).child(String.valueOf(startDay)).child(String.valueOf(schedule.getKey())).setValue(schedule);
+                }
+
+                finish();
+            }
+        });
     }
 
     private ArrayList<Contact> getContactList() {
