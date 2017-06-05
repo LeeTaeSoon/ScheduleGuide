@@ -31,6 +31,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import static android.R.attr.tag;
+
 public class UpdateSchedule extends AppCompatActivity {
 
     DrawerLayout drawerLayout;
@@ -41,7 +43,7 @@ public class UpdateSchedule extends AppCompatActivity {
     final int END_DATE=3;
     final int END_TIME=4;
     int startYear,startMonth,startDay,startDayOfWeek,endYear,endMonth,endDay,key;
-    Spinner tag;
+    Spinner tagSpinner;
     EditText title;
     Spinner alarm;
     EditText location;
@@ -67,7 +69,6 @@ public class UpdateSchedule extends AppCompatActivity {
     FirebaseHandler firebasedb;
     DatabaseReference scheduleDatabase;
     DatabaseReference tagDatabase;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +77,7 @@ public class UpdateSchedule extends AppCompatActivity {
         initActionBar();
         init();
     }
+
     public void initActionBar() {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         sideMenuContainer = (FrameLayout) findViewById(R.id.side_bar_fragment_container);
@@ -103,7 +105,7 @@ public class UpdateSchedule extends AppCompatActivity {
         key=intent.getIntExtra("key",key);
         //intent를 이용해 시작 페이지에서 년 월 일을 가져왔다
         //이제 db에서 이 사람의 이 날짜의 일정과 태그를 가져온다
-        tag=(Spinner)findViewById(R.id.add_schedule_tag);
+        tagSpinner=(Spinner)findViewById(R.id.add_schedule_tag);
         title=(EditText)findViewById(R.id.add_schedule_title);
         alarm=(Spinner)findViewById(R.id.add_schedule_alarm);
         location=(EditText)findViewById(R.id.add_schedule_location);
@@ -132,10 +134,9 @@ public class UpdateSchedule extends AppCompatActivity {
                                 int keyNum=0;
                                 for(DataSnapshot data:dataSnapshot.getChildren()){
                                     Tag tag1=data.getValue(Tag.class);
-
                                     if(tag1.getKey()==schedule.getTag()){
                                         selectTag=keyNum;
-                                        tag.setSelection(selectTag);
+                                        tagSpinner.setSelection(selectTag);
                                         break;
                                     }
                                     keyNum++;
@@ -225,12 +226,14 @@ public class UpdateSchedule extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot data : dataSnapshot.getChildren()){
+
                     Tag t=data.getValue(Tag.class);
+
                     tagList.add(t);
                     tagNameList.add(t.getName());
                 }
                 tagadapter=new ArrayAdapter(getApplicationContext(),android.R.layout.simple_spinner_dropdown_item,tagNameList);
-                tag.setAdapter(tagadapter);
+                tagSpinner.setAdapter(tagadapter);
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -238,7 +241,7 @@ public class UpdateSchedule extends AppCompatActivity {
             }
         });
 
-        tag.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectTag=tagList.get(position).getKey();
@@ -247,7 +250,7 @@ public class UpdateSchedule extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                tag.setSelection(selectTag);
+                tagSpinner.setSelection(selectTag);
             }
         });
 
