@@ -1,12 +1,13 @@
 package com.example.nrst1.scheduleguide;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -60,7 +61,7 @@ public class DayAdapter extends BaseAdapter {
 
         if(day != null) {
             TextView dayView = (TextView) v.findViewById(R.id.day);
-            ListView scheduleList = (ListView) v.findViewById(R.id.list_schedule);
+            RecyclerView scheduleRecycler = (RecyclerView) v.findViewById(R.id.schedule_simple_recycler);
 
             if(dayView != null) {
                 if (day.getDayOfTheWeek() == position % 7) {
@@ -69,10 +70,16 @@ public class DayAdapter extends BaseAdapter {
                 } else dayView.setText("");
             }
 
-            if(scheduleList != null) {
+            if (scheduleRecycler != null) {
                 if (dayIndex > 0) {
-                    ScheduleSimpleAdapter adapter = new ScheduleSimpleAdapter(context, schedules, days.get(dayIndex - 1));
-                    scheduleList.setAdapter(adapter);
+                    RecyclerView.Adapter scheduleAdapter = new ScheduleSimpleAdapter(context, schedules, days.get(dayIndex - 1));
+                    RecyclerView.LayoutManager layoutManager;
+
+                    layoutManager = new LinearLayoutManager(context);
+                    scheduleRecycler.setLayoutManager(layoutManager);
+                    scheduleRecycler.setAdapter(scheduleAdapter);
+                } else {
+                    scheduleRecycler.removeAllViews();
                 }
             }
         }
