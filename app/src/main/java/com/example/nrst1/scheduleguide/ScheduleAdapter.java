@@ -53,17 +53,16 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         tagTable.child(String.valueOf(schedule.getTag())).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // TODO : 태그 색깔 적용
                 // TODO : 지정된 태그가 삭제 될 경우 어떻게 처리할 지 정의
                 Tag tag = dataSnapshot.getValue(Tag.class);
                 String tagName = "";
-                int tagColor = Color.BLACK;
+                int scheduleColor = Color.WHITE;
                 if (tag != null) {
                     tagName = tag.getName();
-                    StringBuffer stringBuffer = new StringBuffer(tag.getColor());
-                    String color = stringBuffer.insert(3, "88").toString();
+                    StringBuffer stringBuffer = new StringBuffer(schedule.getColor());
+                    String color = stringBuffer.insert(1, "88").toString();
 
-                    tagColor = Color.parseColor(color);
+                    scheduleColor = Color.parseColor(color);
                 }
 
                 if (schedule != null) {
@@ -71,7 +70,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                     if (viewHolder.scheduleTagText != null) {
                         viewHolder.scheduleTagText.setText(tagName);
-                        viewHolder.scheduleTagText.setBackgroundColor(tagColor);
+                        viewHolder.scheduleTagText.setBackgroundColor(scheduleColor);
                     }
 
                     if (viewHolder.scheduleTimeText != null) {
