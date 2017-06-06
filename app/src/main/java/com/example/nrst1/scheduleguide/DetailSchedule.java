@@ -72,15 +72,11 @@ public class DetailSchedule extends AppCompatActivity {
 
     public void makeForm(){
 
-//        Intent intent=getIntent();
-//        year=intent.getIntExtra("year",-1);
-//        month=intent.getIntExtra("month",-1);
-//        day=intent.getIntExtra("day",-1);
-//        key=intent.getIntExtra("key",-1);
-        year=2017;
-        month=6;
-        day=1;
-        key=0;
+        Intent intent=getIntent();
+        year=intent.getIntExtra("year",-1);
+        month=intent.getIntExtra("month",-1);
+        day=intent.getIntExtra("day",-1);
+        key=intent.getIntExtra("key",-1);
 
         tag=(TextView)findViewById(R.id.add_schedule_tag);
         title=(TextView)findViewById(R.id.add_schedule_title);

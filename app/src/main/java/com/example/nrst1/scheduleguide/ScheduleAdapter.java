@@ -1,6 +1,7 @@
 package com.example.nrst1.scheduleguide;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -67,6 +69,23 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                 if (schedule != null) {
                     ShowViewHolder viewHolder = (ShowViewHolder) holder;
+                    viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Calendar calendar = new Day().getDateFromString(schedule.getStartDate());
+                            int year = calendar.get(Calendar.YEAR);
+                            int month = calendar.get(Calendar.MONTH) + 1;
+                            int day = calendar.get(Calendar.DAY_OF_MONTH);
+                            int key = schedule.getKey();
+
+                            Intent intent = new Intent(context, DetailSchedule.class);
+                            intent.putExtra("year", year);
+                            intent.putExtra("month", month);
+                            intent.putExtra("day", day);
+                            intent.putExtra("key", key);
+                            context.startActivity(intent);
+                        }
+                    });
 
                     if (viewHolder.scheduleTagText != null) {
                         viewHolder.scheduleTagText.setText(tagName);
@@ -103,6 +122,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public class ShowViewHolder extends RecyclerView.ViewHolder {
 
+        View itemView;
         TextView scheduleTagText;
         TextView scheduleTimeText;
         TextView scheduleTitleText;
@@ -113,6 +133,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             scheduleTagText = (TextView) itemView.findViewById(R.id.schedule_tag_text);
             scheduleTimeText = (TextView) itemView.findViewById(R.id.schedule_time_text);
             scheduleTitleText = (TextView) itemView.findViewById(R.id.schedule_title_text);
+            this.itemView = itemView;
         }
     }
 }
