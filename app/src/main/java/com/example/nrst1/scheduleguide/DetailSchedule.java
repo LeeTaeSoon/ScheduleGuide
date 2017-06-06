@@ -156,8 +156,11 @@ public class DetailSchedule extends AppCompatActivity {
         location_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String l=location.getText().toString();
-
+                String loc=location.getText().toString();
+                //TODO 여기서 길찾기 엑티비티로 인텐트보내면됨
+//                Intent intent=new Intent(getApplicationContext(),MapFindWay.class);
+//                intent.putExtra("location",loc);
+                //startActivity(intent);
 
             }
         });
@@ -185,7 +188,7 @@ public class DetailSchedule extends AppCompatActivity {
         intent.putExtra("day",day);
         intent.putExtra("key",key);
         startActivity(intent);
-        finish();
+        //finish();
     }
 
     public void btnCancle(View view) {
