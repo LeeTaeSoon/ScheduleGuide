@@ -1,17 +1,25 @@
 package com.example.nrst1.scheduleguide;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,7 +30,8 @@ import java.util.ArrayList;
 
 public class DetailSchedule extends AppCompatActivity {
 
-    int year,month,day,key;
+    private static final int LOCATION_REQUEST_CODE = 1;
+    int year, month, day, key;
 
     DrawerLayout drawerLayout;
     FrameLayout sideMenuContainer;
@@ -44,6 +53,11 @@ public class DetailSchedule extends AppCompatActivity {
     DatabaseReference tagDatabase;
 
     ArrayList<Contact> contactList;
+
+    LocationManager locationManager;
+    double latitude;
+    double longitude;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +77,7 @@ public class DetailSchedule extends AppCompatActivity {
         actionBarHandler.setTitle("일정 추가");
         actionBarHandler.setDrawerMenu(drawerLayout, sideMenuContainer);
     }
+
     //tag가져오기
     @Override
     public void onBackPressed() {
@@ -70,40 +85,40 @@ public class DetailSchedule extends AppCompatActivity {
         else super.onBackPressed();
     }
 
-    public void makeForm(){
+    public void makeForm() {
 
-        Intent intent=getIntent();
-        year=intent.getIntExtra("year",-1);
-        month=intent.getIntExtra("month",-1);
-        day=intent.getIntExtra("day",-1);
-        key=intent.getIntExtra("key",-1);
+        Intent intent = getIntent();
+        year = intent.getIntExtra("year", -1);
+        month = intent.getIntExtra("month", -1);
+        day = intent.getIntExtra("day", -1);
+        key = intent.getIntExtra("key", -1);
 
-        tag=(TextView)findViewById(R.id.add_schedule_tag);
-        title=(TextView)findViewById(R.id.add_schedule_title);
-        startDate=(TextView)findViewById(R.id.add_schedule_start_date);
-        endDate=(TextView)findViewById(R.id.add_schedule_end_date);
-        alarm=(TextView)findViewById(R.id.add_schedule_alarm);
-        location=(TextView)findViewById(R.id.add_schedule_location);
-        location_search=(ImageView) findViewById(R.id.add_schedule_location_search);
-        attend=(TextView)findViewById(R.id.add_schedule_attendance);
-        attend_call=(ImageView)findViewById(R.id.add_schedule_attendance_call);
-        color=(TextView)findViewById(R.id.add_schedule_color);
-        memo=(TextView)findViewById(R.id.add_schedule_memo);
+        tag = (TextView) findViewById(R.id.add_schedule_tag);
+        title = (TextView) findViewById(R.id.add_schedule_title);
+        startDate = (TextView) findViewById(R.id.add_schedule_start_date);
+        endDate = (TextView) findViewById(R.id.add_schedule_end_date);
+        alarm = (TextView) findViewById(R.id.add_schedule_alarm);
+        location = (TextView) findViewById(R.id.add_schedule_location);
+        location_search = (ImageView) findViewById(R.id.add_schedule_location_search);
+        attend = (TextView) findViewById(R.id.add_schedule_attendance);
+        attend_call = (ImageView) findViewById(R.id.add_schedule_attendance_call);
+        color = (TextView) findViewById(R.id.add_schedule_color);
+        memo = (TextView) findViewById(R.id.add_schedule_memo);
 
-        firebasedb=new FirebaseHandler(this);
-        scheduleDatabase=firebasedb.getScheduleTable();
-        tagDatabase=firebasedb.getTagTable();
+        firebasedb = new FirebaseHandler(this);
+        scheduleDatabase = firebasedb.getScheduleTable();
+        tagDatabase = firebasedb.getTagTable();
 
         scheduleDatabase.child(String.valueOf(year)).child(String.valueOf(month)).child(String.valueOf(day)).child(String.valueOf(key))
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Schedule schedule=dataSnapshot.getValue(Schedule.class);
+                        Schedule schedule = dataSnapshot.getValue(Schedule.class);
 
                         tagDatabase.child(String.valueOf(schedule.getTag())).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                Tag tag1=dataSnapshot.getValue(Tag.class);
+                                Tag tag1 = dataSnapshot.getValue(Tag.class);
                                 tag.setText(tag1.getName());
                             }
 
@@ -115,20 +130,20 @@ public class DetailSchedule extends AppCompatActivity {
                         title.setText(schedule.getTitle());
                         startDate.setText(schedule.getStartDate());//이거 수정
                         endDate.setText(schedule.getEndDate());
-                        int min=(int)(schedule.getAlarm()*60);
-                        int hour=min/60;
-                        min=min%60;
-                        if(hour!=0) {
+                        int min = (int) (schedule.getAlarm() * 60);
+                        int hour = min / 60;
+                        min = min % 60;
+                        if (hour != 0) {
                             alarm.setText(String.valueOf(hour + "시간" + min + "분"));//int로 바꿔서 시간분으로
-                        }
-                        else{
-                            alarm.setText(String.valueOf(min+"분"));
+                        } else {
+                            alarm.setText(String.valueOf(min + "분"));
                         }
                         location.setText(schedule.getLocation());
                         attend.setText(schedule.getAttandances());
                         color.setBackgroundColor(Color.parseColor(schedule.getColor()));
                         memo.setText(schedule.getMemo());
                     }
+
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
@@ -137,10 +152,12 @@ public class DetailSchedule extends AppCompatActivity {
         //TODO Form만들기 완료
 
     }
-    public void init(){
 
-        contactList=new ArrayList<>();
-        contactList=getContactList();
+    public void init() {
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        contactList = new ArrayList<>();
+        contactList = getContactList();
 
         location.setOnClickListener(new View.OnClickListener() {//여기에 이제 장소 추천
             @Override
@@ -152,22 +169,54 @@ public class DetailSchedule extends AppCompatActivity {
         location_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String loc=location.getText().toString();
+                final String loc = location.getText().toString();
                 //TODO 여기서 길찾기 엑티비티로 인텐트보내면됨
-//                Intent intent=new Intent(getApplicationContext(),MapFindWay.class);
-//                intent.putExtra("location",loc);
-                //startActivity(intent);
 
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, new LocationListener() {
+                    @Override
+                    public void onLocationChanged(Location location) {
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
+
+                        String uri = "http://maps.google.com/maps?saddr=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "&daddr=" + loc;
+                        Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                        intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+
+                        if (checkPermission())
+                            locationManager.removeUpdates(this);
+
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                    }
+
+                    @Override
+                    public void onProviderEnabled(String provider) {
+
+                    }
+
+                    @Override
+                    public void onProviderDisabled(String provider) {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(intent);
+                        Toast.makeText(getBaseContext(), "Gps is turned off!! ", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
         attend_call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String a=attend.getText().toString();
-                for(int i=0;i<contactList.size();i++){
-                    if(contactList.get(i).getName().equals(a)){
-                        String tel = "tel:"+contactList.get(i).getPhonenum();
+                String a = attend.getText().toString();
+                for (int i = 0; i < contactList.size(); i++) {
+                    if (contactList.get(i).getName().equals(a)) {
+                        String tel = "tel:" + contactList.get(i).getPhonenum();
                         startActivity(new Intent("android.intent.action.CALL", Uri.parse(tel)));
                     }
                 }
@@ -178,11 +227,11 @@ public class DetailSchedule extends AppCompatActivity {
 
 
     public void btnUpdate(View view) {
-        Intent intent=new Intent(this,UpdateSchedule.class);
-        intent.putExtra("year",year);
-        intent.putExtra("month",month);
-        intent.putExtra("day",day);
-        intent.putExtra("key",key);
+        Intent intent = new Intent(this, UpdateSchedule.class);
+        intent.putExtra("year", year);
+        intent.putExtra("month", month);
+        intent.putExtra("day", day);
+        intent.putExtra("key", key);
         startActivity(intent);
         //finish();
     }
@@ -196,10 +245,10 @@ public class DetailSchedule extends AppCompatActivity {
 
         Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
 
-        String[] projection = new String[] {
+        String[] projection = new String[]{
                 ContactsContract.CommonDataKinds.Phone.CONTACT_ID, // 연락처 ID -> 사진 정보 가져오는데 사용
                 ContactsContract.CommonDataKinds.Phone.NUMBER,        // 연락처
-                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME }; // 연락처 이름.
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME}; // 연락처 이름.
 
         String[] selectionArgs = null;
 
@@ -241,11 +290,19 @@ public class DetailSchedule extends AppCompatActivity {
     public void attend_call(View view) {
 
         attend.getText().toString();
-        for(int i=0;i<contactList.size();i++){
-            if(contactList.get(i).getName().equals(attend)){
-                String tel = "tel:"+contactList.get(i).getPhonenum();
+        for (int i = 0; i < contactList.size(); i++) {
+            if (contactList.get(i).getName().equals(attend)) {
+                String tel = "tel:" + contactList.get(i).getPhonenum();
                 startActivity(new Intent("android.intent.action.CALL", Uri.parse(tel)));
             }
         }
+    }
+
+    public boolean checkPermission() {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+            return false;
+        }
+        return true;
     }
 }
