@@ -1,6 +1,7 @@
 package com.example.nrst1.scheduleguide;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -44,6 +45,9 @@ public class ActionBarHandler {
             @Override
             public void onClick(View v) {
                 // TODO : 메인화면으로 이동
+                Intent intent = new Intent(context, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                context.startActivity(intent);
             }
         });
     }
