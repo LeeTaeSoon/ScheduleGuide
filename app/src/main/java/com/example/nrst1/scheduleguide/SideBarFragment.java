@@ -11,6 +11,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 
@@ -53,8 +59,60 @@ public class SideBarFragment extends Fragment {
         searchScheduleImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String searchQuery = searchScheduleEdit.getText().toString();
-                // TODO : 일정 검색
+                final String searchQuery = searchScheduleEdit.getText().toString();
+
+                FirebaseHandler firebaseHandler = new FirebaseHandler(getActivity());
+                DatabaseReference scheduleTable = firebaseHandler.getScheduleTable();
+
+                scheduleTable.orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Schedule schedule = null;
+                        boolean exit = false;
+
+                        for (DataSnapshot yearData : dataSnapshot.getChildren()) {
+                            for (DataSnapshot monthData : yearData.getChildren()) {
+                                for (DataSnapshot dayData : monthData.getChildren()) {
+                                    for (DataSnapshot keyData : dayData.getChildren()) {
+                                        Schedule result = keyData.getValue(Schedule.class);
+                                        if (result.getTitle().equals(searchQuery)) {
+                                            schedule = result;
+                                            exit = true;
+                                            break;
+                                        }
+                                    }
+
+                                    if (exit) break;
+                                }
+
+                                if (exit) break;
+                            }
+
+                            if (exit) break;
+                        }
+
+                        if (schedule == null) Toast.makeText(getActivity(), "일정이 없습니다.", Toast.LENGTH_LONG).show();
+                        else {
+                            Calendar calendar = new Day().getDateFromString(schedule.getStartDate());
+                            int year = calendar.get(Calendar.YEAR);
+                            int month = calendar.get(Calendar.MONTH) + 1;
+                            int day = calendar.get(Calendar.DAY_OF_MONTH);
+                            int key = schedule.getKey();
+
+                            Intent intent = new Intent(getActivity(), DetailSchedule.class);
+                            intent.putExtra("year", year);
+                            intent.putExtra("month", month);
+                            intent.putExtra("day", day);
+                            intent.putExtra("key", key);
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 
