@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -24,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     GridView calanderGrid;
     FrameLayout sideMenuContainer;
+
+    ImageView preMonth;
+    ImageView nextMonth;
 
     Spinner spinnerYear;
     Spinner spinnerMonth;
@@ -53,6 +57,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void init() {
+        preMonth = (ImageView) findViewById(R.id.pre_month);
+        nextMonth = (ImageView) findViewById(R.id.next_month);
+
+        preMonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int nowMonth = spinnerMonth.getSelectedItemPosition();
+                if (nowMonth == 0) {
+                    int nowYear = spinnerYear.getSelectedItemPosition();
+                    if (nowYear == 0);
+                    else {
+                        spinnerYear.setSelection(nowYear - 1);
+                        spinnerMonth.setSelection(11);
+                    }
+                }
+                else
+                    spinnerMonth.setSelection(nowMonth - 1);
+            }
+        });
+
+        nextMonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int nowMonth = spinnerMonth.getSelectedItemPosition();
+                if (nowMonth == 11) {
+                    int nowYear = spinnerYear.getSelectedItemPosition();
+                    if (nowYear == 1);
+                    else {
+                        spinnerYear.setSelection(nowYear + 1);
+                        spinnerMonth.setSelection(0);
+                    }
+                }
+                else
+                    spinnerMonth.setSelection(nowMonth + 1);
+            }
+        });
+
         year = 2017;
         month = 6;
 
