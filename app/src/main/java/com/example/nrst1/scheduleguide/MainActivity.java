@@ -25,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
     GridView calanderGrid;
     FrameLayout sideMenuContainer;
 
-    Spinner spinner_year;
-    Spinner spinner_month;
+    Spinner spinnerYear;
+    Spinner spinnerMonth;
     int year;
     int month;
 
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         initActionBar();
     }
 
-    public void initActionBar(){
+    public void initActionBar() {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         sideMenuContainer = (FrameLayout) findViewById(R.id.side_bar_fragment_container);
 
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         month = 6;
 
         days = new ArrayList<>();
-        for(int i = 1 ; i < 31; i++) {
+        for (int i = 1; i < 31; i++) {
             Day day = new Day(year, month, i, (i + 3) % 7);
             days.add(day);
         }
@@ -67,17 +67,17 @@ public class MainActivity extends AppCompatActivity {
         dayAdapter = new DayAdapter(this, days, schedules);
         calanderGrid.setAdapter(dayAdapter);
 
-        spinner_year=(Spinner)findViewById(R.id.year);
-        spinner_year.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerYear = (Spinner) findViewById(R.id.year);
+        spinnerYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                year=position+2017;
+                year = position + 2017;
 
                 new Day().getMonthInfo(year, month, 1, new Day.DayCallback() {
                     @Override
                     public void getMonthInfo(int dayOfTheWeek, int dayNum) {
                         days.clear();
-                        for(int i = 1 ; i < dayNum + 1; i++) {
+                        for (int i = 1; i < dayNum + 1; i++) {
                             Day day = new Day(year, month, i, (i + dayOfTheWeek - 1) % 7);
                             days.add(day);
                         }
@@ -89,22 +89,22 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                year=2017;
+                year = 2017;
             }
         });
-        spinner_year.setSelection(0);
+        spinnerYear.setSelection(0);
 
-        spinner_month=(Spinner)findViewById(R.id.month);
-        spinner_month.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerMonth = (Spinner) findViewById(R.id.month);
+        spinnerMonth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                month=position+1;
+                month = position + 1;
 
                 new Day().getMonthInfo(year, month, 1, new Day.DayCallback() {
                     @Override
                     public void getMonthInfo(int dayOfTheWeek, int dayNum) {
                         days.clear();
-                        for(int i = 1 ; i < dayNum + 1; i++) {
+                        for (int i = 1; i < dayNum + 1; i++) {
                             Day day = new Day(year, month, i, (i + dayOfTheWeek - 1) % 7);
                             days.add(day);
                         }
@@ -116,10 +116,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                month=6;
+                month = 6;
             }
         });
-        spinner_month.setSelection(5);
+        spinnerMonth.setSelection(5);
 
         getSchedules(dayAdapter);
 
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = null;
                 if (schedules.size() == 0) intent = new Intent(getApplication(), AddScheduleActivity.class);
                 else {
-                    for(int i = 0 ; i < schedules.size(); i++) {
+                    for (int i = 0; i < schedules.size(); i++) {
                         Calendar calendar = new Day().getDateFromString(schedules.get(i).getStartDate());
                         int day = calendar.get(Calendar.DAY_OF_MONTH);
                         if (nowDay == day) {
@@ -147,10 +147,10 @@ public class MainActivity extends AppCompatActivity {
                         intent = new Intent(getApplication(), AddScheduleActivity.class);
                 }
 
-                intent.putExtra("year",year);
-                intent.putExtra("month",month);
+                intent.putExtra("year", year);
+                intent.putExtra("month", month);
                 intent.putExtra("day", nowDay);
-                intent.putExtra("dayOfTheWeek",position%7);
+                intent.putExtra("dayOfTheWeek", position % 7);
                 startActivity(intent);
             }
         });
@@ -165,8 +165,8 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 schedules.clear();
 
-                for(DataSnapshot dayData : dataSnapshot.getChildren()) {
-                    for(DataSnapshot data : dayData.getChildren()) {
+                for (DataSnapshot dayData : dataSnapshot.getChildren()) {
+                    for (DataSnapshot data : dayData.getChildren()) {
                         Schedule schedule = data.getValue(Schedule.class);
                         schedules.add(schedule);
                     }
