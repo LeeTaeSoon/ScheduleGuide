@@ -144,24 +144,28 @@ public class AddScheduleActivity extends AppCompatActivity {
                 showDialog(START_DATE);
             }
         });
+        startDate.setText(String.valueOf(startYear) + "-" + String.valueOf(startMonth) + "-" + String.valueOf(startDay));
         startTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialog(START_TIME);
             }
         });
+        startTime.setText("9:0");
         endDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialog(END_DATE);
             }
         });
+        endDate.setText(String.valueOf(endYear) + "-" + String.valueOf(endMonth) + "-" + String.valueOf(endDay));
         endTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialog(END_TIME);
             }
         });
+        endTime.setText("9:0");
 
         alarm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
