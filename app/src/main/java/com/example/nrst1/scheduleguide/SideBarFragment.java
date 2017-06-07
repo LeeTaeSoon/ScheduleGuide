@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Calendar;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,7 +62,18 @@ public class SideBarFragment extends Fragment {
         addScheduleText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO : 일정 추가 화면
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH) + 1;
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                int dayOfTheWeek = calendar.get(Calendar.DAY_OF_WEEK);
+
+                Intent intent = new Intent(getActivity(), AddScheduleActivity.class);
+                intent.putExtra("year", year);
+                intent.putExtra("month", month);
+                intent.putExtra("day", day);
+                intent.putExtra("dayOfTheWeek", dayOfTheWeek);
+                startActivity(intent);
             }
         });
 
