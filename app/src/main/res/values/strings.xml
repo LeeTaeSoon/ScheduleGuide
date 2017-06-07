@@ -76,7 +76,6 @@
         <item>시안</item>
         <item>노랑</item>
         <item>보라</item>
-        <item>검정</item>
     </string-array>
     <string name="title_activity_update_schedule">UpdateSchedule</string>
 </resources>

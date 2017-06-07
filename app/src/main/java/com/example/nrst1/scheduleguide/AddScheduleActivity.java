@@ -64,6 +64,8 @@ public class AddScheduleActivity extends AppCompatActivity {
     ArrayList<Contact> contactList;
     ArrayList<String> callList;
 
+    ArrayList<Tag> tags;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +84,7 @@ public class AddScheduleActivity extends AppCompatActivity {
         actionBarHandler.setTitle("일정 추가");
         actionBarHandler.setDrawerMenu(drawerLayout, sideMenuContainer);
     }
-//tag가져오기
+
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(sideMenuContainer)) drawerLayout.closeDrawer(sideMenuContainer);
@@ -185,12 +187,14 @@ public class AddScheduleActivity extends AppCompatActivity {
 
         tagNameList=new ArrayList<String>();
         tagList=new ArrayList<Tag>();
+        tags = new ArrayList<>();
         tagdatabase.addValueEventListener(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot data : dataSnapshot.getChildren()){
                     Tag t=data.getValue(Tag.class);
                     tagList.add(t);
+                    tags.add(t);
                     tagNameList.add(t.getName());
                 }
                 tagadapter=new ArrayAdapter(getApplicationContext(),android.R.layout.simple_spinner_dropdown_item,tagNameList);
@@ -202,12 +206,18 @@ public class AddScheduleActivity extends AppCompatActivity {
             }
         });
 
-
+        tag.setSelection(0);
         tag.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectTag=tagList.get(position).getKey();
 
+                color.setSelection(0);
+                col = tags.get(position).getColor();
+                color.setBackgroundColor(Color.parseColor(col));
+
+                double tagAlarm = tags.get(position).getAlarm();
+                alarm.setSelection((int) (tagAlarm / 0.5));
             }
 
             @Override
@@ -239,32 +249,28 @@ public class AddScheduleActivity extends AppCompatActivity {
                     col = "#FFFFFF";
                 }
                 else if(position==1){
-                    view.setBackgroundColor(Color.RED);
+                    color.setBackgroundColor(Color.RED);
                     col = "#FF0000";
                 }
                 else if(position==2){
-                    view.setBackgroundColor(Color.GREEN);
+                    color.setBackgroundColor(Color.GREEN);
                     col = "#00FF00";
                 }
                 else if(position==3){
-                    view.setBackgroundColor(Color.BLUE);
+                    color.setBackgroundColor(Color.BLUE);
                     col = "#0000FF";
                 }
                 else if(position==4){
-                    view.setBackgroundColor(Color.CYAN);
+                    color.setBackgroundColor(Color.CYAN);
                     col = "#00FFFF";
                 }
                 else if(position==5){
-                    view.setBackgroundColor(Color.YELLOW);
+                    color.setBackgroundColor(Color.YELLOW);
                     col = "#FFFF00";
                 }
                 else if(position==6){
-                    view.setBackgroundColor(Color.MAGENTA);
+                    color.setBackgroundColor(Color.MAGENTA);
                     col = "#FF00FF";
-                }
-                else{
-                    view.setBackgroundColor(Color.BLACK);
-                    col = "#000000";
                 }
             }
 
