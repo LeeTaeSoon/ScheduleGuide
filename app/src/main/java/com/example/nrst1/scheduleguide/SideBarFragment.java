@@ -81,7 +81,16 @@ public class SideBarFragment extends Fragment {
         searchTodayScheduleText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO : 오늘 일정 목록 화면
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH) + 1;
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                Intent intent = new Intent(getActivity(), ShowScheduleListActivity.class);
+                intent.putExtra("year", year);
+                intent.putExtra("month", month);
+                intent.putExtra("day", day);
+                startActivity(intent);
             }
         });
 
