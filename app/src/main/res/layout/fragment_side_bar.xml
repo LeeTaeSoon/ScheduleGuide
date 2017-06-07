@@ -16,6 +16,8 @@
             android:textStyle="bold"
             android:textSize="17sp"
             android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -27,12 +29,14 @@
             <EditText
                 android:id="@+id/side_bar_search_edit"
                 android:layout_width="170dp"
+                android:textSize="15sp"
+                android:hint="일정 제목을 입력하세요."
                 android:layout_height="wrap_content" />
 
             <ImageView
                 android:id="@+id/side_bar_search_img"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_gravity="center"
                 android:src="@drawable/search" />
         </LinearLayout>
@@ -40,14 +44,16 @@
         <TextView
             android:id="@+id/side_bar_add_schedule"
             android:text="일정 추가"
-            android:textSize="16sp"
+            android:textSize="18sp"
+            android:padding="7dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/side_bar_search_today_schedule"
             android:text="오늘의 일정"
-            android:textSize="16sp"
+            android:textSize="18sp"
+            android:padding="7dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -56,15 +62,18 @@
             android:textStyle="bold"
             android:textSize="17sp"
             android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp" />
+            android:layout_marginTop="10dp" />
 
         <TextView
             android:id="@+id/side_bar_set_tag"
             android:text="태그"
-            android:textSize="16sp"
+            android:textSize="18sp"
+            android:padding="7dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
