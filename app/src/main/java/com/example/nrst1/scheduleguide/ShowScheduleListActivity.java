@@ -42,12 +42,12 @@ public class ShowScheduleListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_schedule_list);
 
-        initActionBar();
-
         Intent intent = getIntent();
         year = intent.getIntExtra("year", -1);
         month = intent.getIntExtra("month", -1);
         day = intent.getIntExtra("day", -1);
+
+        initActionBar();
 
         schedules = new ArrayList<>();
 
@@ -58,7 +58,6 @@ public class ShowScheduleListActivity extends AppCompatActivity {
         addScheduleImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO : 현재 날짜 정보 보내기
                 Intent intent = new Intent(getApplication(), AddScheduleActivity.class);
                 intent.putExtra("year", year);
                 intent.putExtra("month", month);
@@ -67,7 +66,6 @@ public class ShowScheduleListActivity extends AppCompatActivity {
             }
         });
 
-        // TODO : 일정 클릭 시 일정 세부 정보 화면으로 전환
         scheduleRecycle = (RecyclerView) findViewById(R.id.schedule_list_recycler);
         layoutManager = new LinearLayoutManager(this);
         scheduleRecycle.setLayoutManager(layoutManager);
@@ -105,8 +103,7 @@ public class ShowScheduleListActivity extends AppCompatActivity {
         ActionBarHandler actionBarHandler = new ActionBarHandler(this, getSupportActionBar());
         actionBarHandler.setBasicActionBar();
 
-        // TODO : 타이틀을 해당 날짜를 전달받아 보여줄 것
-        actionBarHandler.setTitle("일정 목록");
+        actionBarHandler.setTitle(String.valueOf(year) + "년 " + String.valueOf(month) + "월 " + String.valueOf(day) + "일");
         actionBarHandler.setDrawerMenu(drawerLayout, sideMenuContainer);
     }
 
