@@ -63,6 +63,8 @@ public class UpdateSchedule extends AppCompatActivity {
     ArrayList<Contact> contactList;
     ArrayList<String> callList;
 
+    ArrayList<Tag> tags;
+
     FirebaseHandler firebasedb;
     DatabaseReference scheduleDatabase;
     DatabaseReference tagDatabase;
@@ -84,7 +86,7 @@ public class UpdateSchedule extends AppCompatActivity {
         actionBarHandler.setTitle("일정 수정");
         actionBarHandler.setDrawerMenu(drawerLayout, sideMenuContainer);
     }
-    //tag가져오기
+
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(sideMenuContainer)) drawerLayout.closeDrawer(sideMenuContainer);
@@ -163,7 +165,13 @@ public class UpdateSchedule extends AppCompatActivity {
                         attend.setText(schedule.getAttandances());
                         col=schedule.getColor();
                         color.setBackgroundColor(Color.parseColor(schedule.getColor()));
-                        color.setSelection(1);
+                        if (col.equals("#FFFFFF")) color.setSelection(0);
+                        else if (col.equals("#FF0000")) color.setSelection(1);
+                        else if (col.equals("#00FF00")) color.setSelection(2);
+                        else if (col.equals("#0000FF")) color.setSelection(3);
+                        else if (col.equals("#00FFFF")) color.setSelection(4);
+                        else if (col.equals("#FFFF00")) color.setSelection(5);
+                        else if (col.equals("#FF00FF")) color.setSelection(6);
                         memo.setText(schedule.getMemo());
                     }
                     @Override
@@ -174,8 +182,6 @@ public class UpdateSchedule extends AppCompatActivity {
         //TODO Form만들기
     }
     public void init(){
-
-
         startDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -219,16 +225,16 @@ public class UpdateSchedule extends AppCompatActivity {
 
         tagNameList=new ArrayList<String>();
         tagList=new ArrayList<>();
+        tags = new ArrayList<>();
         tagdatabase.addValueEventListener(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot data : dataSnapshot.getChildren()){
-
-                    com.example.nrst1.scheduleguide.Tag t=data.getValue(com.example.nrst1.scheduleguide.Tag.class);
+                    Tag t = data.getValue(Tag.class);
 
                     tagList.add(t);
+                    tags.add(t);
                     tagNameList.add(t.getName());
-
                 }
                 tagadapter=new ArrayAdapter(getApplicationContext(),android.R.layout.simple_spinner_dropdown_item,tagNameList);
                 tagSpinner.setAdapter(tagadapter);
@@ -272,41 +278,37 @@ public class UpdateSchedule extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(position==0){
-                    col=String.valueOf(-1);
+                    col="#FFFFFF";
                 }
                 else if(position==1){
-                    view.setBackgroundColor(Color.RED);
+                    color.setBackgroundColor(Color.RED);
                     col = "#FF0000";
                 }
                 else if(position==2){
-                    view.setBackgroundColor(Color.GREEN);
+                    color.setBackgroundColor(Color.GREEN);
                     col = "#00FF00";
                 }
                 else if(position==3){
-                    view.setBackgroundColor(Color.BLUE);
+                    color.setBackgroundColor(Color.BLUE);
                     col = "#0000FF";
                 }
                 else if(position==4){
-                    view.setBackgroundColor(Color.CYAN);
+                    color.setBackgroundColor(Color.CYAN);
                     col = "#00FFFF";
                 }
                 else if(position==5){
-                    view.setBackgroundColor(Color.YELLOW);
+                    color.setBackgroundColor(Color.YELLOW);
                     col = "#FFFF00";
                 }
                 else if(position==6){
-                    view.setBackgroundColor(Color.MAGENTA);
+                    color.setBackgroundColor(Color.MAGENTA);
                     col = "#FF00FF";
-                }
-                else{
-                    view.setBackgroundColor(Color.BLACK);
-                    col = "#000000";
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                
             }
         });
 
