@@ -136,7 +136,7 @@ public class DetailSchedule extends AppCompatActivity {
                         if (hour == 0 && min == 0) alarm.setText("알림 없음");
                         else if (hour == 0) alarm.setText(String.valueOf(min + " 분 전"));
                         else if (min == 0) alarm.setText(String.valueOf(hour) + " 시간 전");
-                        else alarm.setText(String.valueOf(hour) + " 시간 " + String.valueOf(min) + " 분 전");
+                        else alarm.setText(String.valueOf(hour) + " 시간 반 전");
 
                         location.setText(schedule.getLocation());
                         attend.setText(schedule.getAttandances());

@@ -48,7 +48,7 @@ public class TagListActivity extends AppCompatActivity {
         addTagImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Tag tag = new Tag("태그 추가", "#77FF77", 0);
+                Tag tag = new Tag("", "#FF0000", 0);
                 tags.add(tag);
                 tagAdapter.notifyDataSetChanged();
             }

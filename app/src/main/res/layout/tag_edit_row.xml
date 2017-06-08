@@ -4,12 +4,14 @@
     android:padding="20dp"
     android:layout_height="wrap_content">
 
-    <!-- TODO : 동그라미 모양 팔레트 형태로 수정 -->
-    <TextView
+    <Spinner
         android:id="@+id/tag_color_edit"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="match_parent" />
+        android:entries="@array/color"
+        android:layout_gravity="center_vertical"
+        android:layout_height="30dp"
+        android:layout_marginRight="5dp"/>
 
     <EditText
         android:id="@+id/tag_name_edit"
