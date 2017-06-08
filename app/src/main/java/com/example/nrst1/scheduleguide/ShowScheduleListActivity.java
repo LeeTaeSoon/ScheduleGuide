@@ -108,7 +108,7 @@ public class ShowScheduleListActivity extends AppCompatActivity {
     }
 
     public void setScheduleTable() {
-        scheduleTable.child(String.valueOf(year)).child(String.valueOf(month)).child(String.valueOf(day)).orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
+        scheduleTable.child(String.valueOf(year)).child(String.valueOf(month)).child(String.valueOf(day)).orderByKey().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 schedules.clear();

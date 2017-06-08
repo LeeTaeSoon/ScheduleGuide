@@ -133,11 +133,11 @@ public class DetailSchedule extends AppCompatActivity {
                         int min = (int) (schedule.getAlarm() * 60);
                         int hour = min / 60;
                         min = min % 60;
-                        if (hour != 0) {
-                            alarm.setText(String.valueOf(hour + "시간" + min + "분"));//int로 바꿔서 시간분으로
-                        } else {
-                            alarm.setText(String.valueOf(min + "분"));
-                        }
+                        if (hour == 0 && min == 0) alarm.setText("알림 없음");
+                        else if (hour == 0) alarm.setText(String.valueOf(min + " 분 전"));
+                        else if (min == 0) alarm.setText(String.valueOf(hour) + " 시간 전");
+                        else alarm.setText(String.valueOf(hour) + " 시간 " + String.valueOf(min) + " 분 전");
+
                         location.setText(schedule.getLocation());
                         attend.setText(schedule.getAttandances());
                         color.setBackgroundColor(Color.parseColor(schedule.getColor()));

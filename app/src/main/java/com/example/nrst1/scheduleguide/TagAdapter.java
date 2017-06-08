@@ -64,9 +64,9 @@ public class TagAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     int minute = (int) ((alarm - hour) * 60);
 
                     if (hour == 0 && minute == 0) viewHolder.tagAlarmText.setText("알림 없음");
-                    else if (hour == 0) viewHolder.tagAlarmText.setText(String.valueOf(minute) + "분 전");
+                    else if (hour == 0) viewHolder.tagAlarmText.setText(String.valueOf(minute) + " 분 전");
                     else if (minute == 0) viewHolder.tagAlarmText.setText(String.valueOf(hour) + " 시간 전");
-                    else viewHolder.tagAlarmText.setText(String.valueOf(hour) + " 시간 " + String.valueOf(minute) + "분 전");
+                    else viewHolder.tagAlarmText.setText(String.valueOf(hour) + " 시간 " + String.valueOf(minute) + " 분 전");
                 }
 
                 viewHolder.tagModifyImg.setOnClickListener(new View.OnClickListener() {
