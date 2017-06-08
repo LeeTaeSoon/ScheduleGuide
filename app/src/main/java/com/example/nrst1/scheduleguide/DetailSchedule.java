@@ -74,7 +74,7 @@ public class DetailSchedule extends AppCompatActivity {
 
         ActionBarHandler actionBarHandler = new ActionBarHandler(this, getSupportActionBar());
         actionBarHandler.setBasicActionBar();
-        actionBarHandler.setTitle("일정 추가");
+        actionBarHandler.setTitle("일정 내용");
         actionBarHandler.setDrawerMenu(drawerLayout, sideMenuContainer);
     }
 

@@ -81,7 +81,7 @@ public class UpdateSchedule extends AppCompatActivity {
 
         ActionBarHandler actionBarHandler = new ActionBarHandler(this, getSupportActionBar());
         actionBarHandler.setBasicActionBar();
-        actionBarHandler.setTitle("일정 추가");
+        actionBarHandler.setTitle("일정 수정");
         actionBarHandler.setDrawerMenu(drawerLayout, sideMenuContainer);
     }
     //tag가져오기
