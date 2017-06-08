@@ -110,7 +110,7 @@ public class DetailSchedule extends AppCompatActivity {
         tagDatabase = firebasedb.getTagTable();
 
         scheduleDatabase.child(String.valueOf(year)).child(String.valueOf(month)).child(String.valueOf(day)).child(String.valueOf(key))
-                .addValueEventListener(new ValueEventListener() {
+                .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Schedule schedule = dataSnapshot.getValue(Schedule.class);
