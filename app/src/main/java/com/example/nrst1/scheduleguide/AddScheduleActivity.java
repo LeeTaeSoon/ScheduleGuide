@@ -212,8 +212,14 @@ public class AddScheduleActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectTag=tagList.get(position).getKey();
 
-                color.setSelection(0);
                 col = tags.get(position).getColor();
+                if (col.equals("#FFFFFF")) color.setSelection(0);
+                else if (col.equals("#FF0000")) color.setSelection(1);
+                else if (col.equals("#00FF00")) color.setSelection(2);
+                else if (col.equals("#0000FF")) color.setSelection(3);
+                else if (col.equals("#00FFFF")) color.setSelection(4);
+                else if (col.equals("#FFFF00")) color.setSelection(5);
+                else if (col.equals("#FF00FF")) color.setSelection(6);
                 color.setBackgroundColor(Color.parseColor(col));
 
                 double tagAlarm = tags.get(position).getAlarm();
