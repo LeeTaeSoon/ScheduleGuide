@@ -86,12 +86,20 @@
 
                     <TextView
                         android:id="@+id/add_schedule_start_date"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:gravity="left"
-                        android:text="시작날짜"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="5"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"/>
+
+                    <TextView
+                        android:id="@+id/add_schedule_start_time"
+                        android:textSize="14sp"
+                        android:gravity="right"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
@@ -111,12 +119,20 @@
 
                     <TextView
                         android:id="@+id/add_schedule_end_date"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:gravity="left"
-                        android:text="종료날짜"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="5"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"/>
+
+                    <TextView
+                        android:id="@+id/add_schedule_end_time"
+                        android:textSize="14sp"
+                        android:gravity="right"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 

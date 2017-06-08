@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class DetailSchedule extends AppCompatActivity {
 
@@ -39,7 +40,9 @@ public class DetailSchedule extends AppCompatActivity {
     TextView tag;
     TextView title;
     TextView startDate;
+    TextView startTime;
     TextView endDate;
+    TextView endTime;
     TextView alarm;
     TextView location;
     ImageView location_search;
@@ -47,6 +50,8 @@ public class DetailSchedule extends AppCompatActivity {
     ImageView attend_call;
     TextView color;
     TextView memo;
+
+    String[] DOTW = {"일", "월", "화", "수", "목", "금", "토"};
 
     FirebaseHandler firebasedb;
     DatabaseReference scheduleDatabase;
@@ -96,7 +101,9 @@ public class DetailSchedule extends AppCompatActivity {
         tag = (TextView) findViewById(R.id.add_schedule_tag);
         title = (TextView) findViewById(R.id.add_schedule_title);
         startDate = (TextView) findViewById(R.id.add_schedule_start_date);
+        startTime = (TextView) findViewById(R.id.add_schedule_start_time);
         endDate = (TextView) findViewById(R.id.add_schedule_end_date);
+        endTime = (TextView) findViewById(R.id.add_schedule_end_time);
         alarm = (TextView) findViewById(R.id.add_schedule_alarm);
         location = (TextView) findViewById(R.id.add_schedule_location);
         location_search = (ImageView) findViewById(R.id.add_schedule_location_search);
@@ -128,8 +135,22 @@ public class DetailSchedule extends AppCompatActivity {
                             }
                         });
                         title.setText(schedule.getTitle());
-                        startDate.setText(schedule.getStartDate());//이거 수정
-                        endDate.setText(schedule.getEndDate());
+
+                        String ampm;
+                        Calendar sCalendar = new Day().getDateFromString(schedule.getStartDate());
+                        if (sCalendar.get(Calendar.AM_PM) == Calendar.AM) ampm = "오전";
+                        else ampm = "오후";
+                        startDate.setText(String.valueOf(sCalendar.get(Calendar.YEAR)) + "년 " + String.valueOf(sCalendar.get(Calendar.MONTH) + 1) + "월 " +
+                                String.valueOf(sCalendar.get(Calendar.DAY_OF_MONTH)) + "일 (" + DOTW[sCalendar.get(Calendar.DAY_OF_WEEK)] + ")");
+                        startTime.setText(ampm + " " + String.valueOf(sCalendar.get(Calendar.HOUR)) + ":" + String.valueOf(sCalendar.get(Calendar.MINUTE)));
+
+                        Calendar eCalendar = new Day().getDateFromString(schedule.getEndDate());
+                        if (eCalendar.get(Calendar.AM_PM) == Calendar.AM) ampm = "오전";
+                        else ampm = "오후";
+                        endDate.setText(String.valueOf(eCalendar.get(Calendar.YEAR)) + "년 " + String.valueOf(eCalendar.get(Calendar.MONTH) + 1) + "월 " +
+                                String.valueOf(eCalendar.get(Calendar.DAY_OF_MONTH)) + "일 (" + DOTW[eCalendar.get(Calendar.DAY_OF_WEEK)] + ")");
+                        endTime.setText(ampm + " " + String.valueOf(eCalendar.get(Calendar.HOUR)) + ":" + String.valueOf(eCalendar.get(Calendar.MINUTE)));
+
                         int min = (int) (schedule.getAlarm() * 60);
                         int hour = min / 60;
                         min = min % 60;
