@@ -179,8 +179,8 @@
                     <ImageView
                         android:id="@+id/add_schedule_location_search"
                         android:src="@drawable/findway"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp" />
+                        android:layout_width="20dp"
+                        android:layout_height="20dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -206,8 +206,8 @@
                     <ImageView
                         android:id="@+id/add_schedule_attendance_call"
                         android:src="@drawable/phonecall"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp" />
+                        android:layout_width="20dp"
+                        android:layout_height="20dp" />
                 </LinearLayout>
 
                 <LinearLayout
