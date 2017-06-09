@@ -48,7 +48,7 @@ public class Day {
     public void getMonthInfo(int year, int month, final int day, final DayCallback callback) {
         FirebaseHandler firebaseHandler = new FirebaseHandler();
         firebaseHandler.setFirebase();
-        DatabaseReference calenderTable = firebaseHandler.getCalanderTable();
+        DatabaseReference calenderTable = firebaseHandler.getCalendarTable();
 
         calenderTable.child(String.valueOf(year)).child(String.valueOf(month)).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
