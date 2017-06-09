@@ -8,6 +8,7 @@
         android:id="@+id/schedule_tag_text"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:gravity="center"
         android:padding="10dp"
         android:layout_marginRight="20dp"/>
 
