@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AddScheduleActivity extends AppCompatActivity {
 
@@ -295,15 +296,14 @@ public class AddScheduleActivity extends AppCompatActivity {
     }
 
     public void btnAdd(View view) {
-        String Title=title.getText().toString();
+        final String Title=title.getText().toString();
         String Location=location.getText().toString();
         String Attend=attend.getText().toString();
-        String Memo=memo.getText().toString();
+        final String Memo=memo.getText().toString();
 
         final String startday = startDate.getText().toString() + " " + startTime.getText().toString();
                 /*+" "+"01:30"*/;
         String endday=endDate.getText().toString()+" "+endTime.getText().toString();//default로 날짜는 오늘날짜
-
 
         final Schedule schedule = new Schedule(selectTag, Title, startday, endday, ringring, Location, Attend, col, Memo);
 
@@ -315,12 +315,23 @@ public class AddScheduleActivity extends AppCompatActivity {
             @Override
             public void getSchedules(ArrayList<Schedule> schedules) {
                 int scheduleNum = schedules.size();
+                int key = -1;
+
                 if (scheduleNum == 0) {
+                    key = 0;
                     schedule.setKey(0);
                     scheduleTable.child(String.valueOf(startYear)).child(String.valueOf(startMonth)).child(String.valueOf(startDay)).child("0").setValue(schedule);
                 } else {
-                    schedule.setKey(schedules.get(scheduleNum - 1).getKey() + 1);
-                    scheduleTable.child(String.valueOf(startYear)).child(String.valueOf(startMonth)).child(String.valueOf(startDay)).child(String.valueOf(schedule.getKey())).setValue(schedule);
+                    key = schedules.get(scheduleNum - 1).getKey() + 1;
+                    schedule.setKey(key);
+                    scheduleTable.child(String.valueOf(startYear)).child(String.valueOf(startMonth)).child(String.valueOf(startDay)).child(String.valueOf(key)).setValue(schedule);
+                }
+
+                if (ringring > 0) {
+                    Calendar calendar = new Day().getDateFromString(startday);
+
+                    NotificationHandler notificationHandler = new NotificationHandler(getApplicationContext());
+                    notificationHandler.setAlarm(Title, Memo, key, calendar, ringring);
                 }
 
                 finish();
