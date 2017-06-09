@@ -18,6 +18,7 @@ public class FirebaseHandler {
     DatabaseReference calendarTable;
     DatabaseReference tagTable;
     DatabaseReference scheduleTable;
+    DatabaseReference restaurantTable;
 
     FirebaseHandler()  {}
     FirebaseHandler(Context context) {
@@ -33,6 +34,7 @@ public class FirebaseHandler {
         calendarTable = database.getReference("Calendar");
         tagTable = database.getReference(uuid + "/Tag");
         scheduleTable = database.getReference(uuid + "/Schedule");
+        restaurantTable=database.getReference("Restaurant"+"/Data"+"/DATA");
     }
 
     public DatabaseReference getCalendarTable() { return this.calendarTable; }
@@ -40,4 +42,6 @@ public class FirebaseHandler {
     public DatabaseReference getTagTable() { return this.tagTable; }
     
     public DatabaseReference getScheduleTable() { return this.scheduleTable; }
+
+    public DatabaseReference getRestaurantTable(){ return this.restaurantTable; }
 }

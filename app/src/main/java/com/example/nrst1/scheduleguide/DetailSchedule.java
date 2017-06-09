@@ -185,7 +185,9 @@ public class DetailSchedule extends AppCompatActivity {
         location.setOnClickListener(new View.OnClickListener() {//여기에 이제 장소 추천
             @Override
             public void onClick(View v) {
-
+                Intent intent=new Intent(getApplicationContext(),LocationRecommend.class);
+                intent.putExtra("location",location.getText().toString());
+                startActivity(intent);
             }
         });
 
