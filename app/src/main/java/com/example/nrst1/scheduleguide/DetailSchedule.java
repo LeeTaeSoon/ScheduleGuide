@@ -142,14 +142,14 @@ public class DetailSchedule extends AppCompatActivity {
                             if (sCalendar.get(Calendar.AM_PM) == Calendar.AM) ampm = "오전";
                             else ampm = "오후";
                             startDate.setText(String.valueOf(sCalendar.get(Calendar.YEAR)) + "년 " + String.valueOf(sCalendar.get(Calendar.MONTH) + 1) + "월 " +
-                                    String.valueOf(sCalendar.get(Calendar.DAY_OF_MONTH)) + "일 (" + DOTW[sCalendar.get(Calendar.DAY_OF_WEEK)] + ")");
+                                    String.valueOf(sCalendar.get(Calendar.DAY_OF_MONTH)) + "일 (" + DOTW[sCalendar.get(Calendar.DAY_OF_WEEK) - 1] + ")");
                             startTime.setText(ampm + " " + String.valueOf(sCalendar.get(Calendar.HOUR)) + ":" + String.valueOf(sCalendar.get(Calendar.MINUTE)));
 
                             Calendar eCalendar = new Day().getDateFromString(schedule.getEndDate());
                             if (eCalendar.get(Calendar.AM_PM) == Calendar.AM) ampm = "오전";
                             else ampm = "오후";
                             endDate.setText(String.valueOf(eCalendar.get(Calendar.YEAR)) + "년 " + String.valueOf(eCalendar.get(Calendar.MONTH) + 1) + "월 " +
-                                    String.valueOf(eCalendar.get(Calendar.DAY_OF_MONTH)) + "일 (" + DOTW[eCalendar.get(Calendar.DAY_OF_WEEK)] + ")");
+                                    String.valueOf(eCalendar.get(Calendar.DAY_OF_MONTH)) + "일 (" + DOTW[eCalendar.get(Calendar.DAY_OF_WEEK) - 1] + ")");
                             endTime.setText(ampm + " " + String.valueOf(eCalendar.get(Calendar.HOUR)) + ":" + String.valueOf(eCalendar.get(Calendar.MINUTE)));
 
                             int min = (int) (schedule.getAlarm() * 60);
