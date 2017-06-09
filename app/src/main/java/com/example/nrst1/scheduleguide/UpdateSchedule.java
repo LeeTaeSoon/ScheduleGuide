@@ -210,7 +210,7 @@ public class UpdateSchedule extends AppCompatActivity {
         alarm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ringring=(position+1)*0.5;//분
+                ringring = position * 0.5;
             }
 
             @Override
