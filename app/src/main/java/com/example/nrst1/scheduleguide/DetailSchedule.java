@@ -117,52 +117,54 @@ public class DetailSchedule extends AppCompatActivity {
         tagDatabase = firebasedb.getTagTable();
 
         scheduleDatabase.child(String.valueOf(year)).child(String.valueOf(month)).child(String.valueOf(day)).child(String.valueOf(key))
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Schedule schedule = dataSnapshot.getValue(Schedule.class);
+                        if (schedule == null) finish();
+                        else {
+                            tagDatabase.child(String.valueOf(schedule.getTag())).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Tag tag1 = dataSnapshot.getValue(Tag.class);
+                                    tag.setText(tag1.getName());
+                                }
 
-                        tagDatabase.child(String.valueOf(schedule.getTag())).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                Tag tag1 = dataSnapshot.getValue(Tag.class);
-                                tag.setText(tag1.getName());
-                            }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                                }
+                            });
+                            title.setText(schedule.getTitle());
 
-                            }
-                        });
-                        title.setText(schedule.getTitle());
+                            String ampm;
+                            Calendar sCalendar = new Day().getDateFromString(schedule.getStartDate());
+                            if (sCalendar.get(Calendar.AM_PM) == Calendar.AM) ampm = "오전";
+                            else ampm = "오후";
+                            startDate.setText(String.valueOf(sCalendar.get(Calendar.YEAR)) + "년 " + String.valueOf(sCalendar.get(Calendar.MONTH) + 1) + "월 " +
+                                    String.valueOf(sCalendar.get(Calendar.DAY_OF_MONTH)) + "일 (" + DOTW[sCalendar.get(Calendar.DAY_OF_WEEK)] + ")");
+                            startTime.setText(ampm + " " + String.valueOf(sCalendar.get(Calendar.HOUR)) + ":" + String.valueOf(sCalendar.get(Calendar.MINUTE)));
 
-                        String ampm;
-                        Calendar sCalendar = new Day().getDateFromString(schedule.getStartDate());
-                        if (sCalendar.get(Calendar.AM_PM) == Calendar.AM) ampm = "오전";
-                        else ampm = "오후";
-                        startDate.setText(String.valueOf(sCalendar.get(Calendar.YEAR)) + "년 " + String.valueOf(sCalendar.get(Calendar.MONTH) + 1) + "월 " +
-                                String.valueOf(sCalendar.get(Calendar.DAY_OF_MONTH)) + "일 (" + DOTW[sCalendar.get(Calendar.DAY_OF_WEEK)] + ")");
-                        startTime.setText(ampm + " " + String.valueOf(sCalendar.get(Calendar.HOUR)) + ":" + String.valueOf(sCalendar.get(Calendar.MINUTE)));
+                            Calendar eCalendar = new Day().getDateFromString(schedule.getEndDate());
+                            if (eCalendar.get(Calendar.AM_PM) == Calendar.AM) ampm = "오전";
+                            else ampm = "오후";
+                            endDate.setText(String.valueOf(eCalendar.get(Calendar.YEAR)) + "년 " + String.valueOf(eCalendar.get(Calendar.MONTH) + 1) + "월 " +
+                                    String.valueOf(eCalendar.get(Calendar.DAY_OF_MONTH)) + "일 (" + DOTW[eCalendar.get(Calendar.DAY_OF_WEEK)] + ")");
+                            endTime.setText(ampm + " " + String.valueOf(eCalendar.get(Calendar.HOUR)) + ":" + String.valueOf(eCalendar.get(Calendar.MINUTE)));
 
-                        Calendar eCalendar = new Day().getDateFromString(schedule.getEndDate());
-                        if (eCalendar.get(Calendar.AM_PM) == Calendar.AM) ampm = "오전";
-                        else ampm = "오후";
-                        endDate.setText(String.valueOf(eCalendar.get(Calendar.YEAR)) + "년 " + String.valueOf(eCalendar.get(Calendar.MONTH) + 1) + "월 " +
-                                String.valueOf(eCalendar.get(Calendar.DAY_OF_MONTH)) + "일 (" + DOTW[eCalendar.get(Calendar.DAY_OF_WEEK)] + ")");
-                        endTime.setText(ampm + " " + String.valueOf(eCalendar.get(Calendar.HOUR)) + ":" + String.valueOf(eCalendar.get(Calendar.MINUTE)));
+                            int min = (int) (schedule.getAlarm() * 60);
+                            int hour = min / 60;
+                            min = min % 60;
+                            if (hour == 0 && min == 0) alarm.setText("알림 없음");
+                            else if (hour == 0) alarm.setText(String.valueOf(min + " 분 전"));
+                            else if (min == 0) alarm.setText(String.valueOf(hour) + " 시간 전");
+                            else alarm.setText(String.valueOf(hour) + " 시간 반 전");
 
-                        int min = (int) (schedule.getAlarm() * 60);
-                        int hour = min / 60;
-                        min = min % 60;
-                        if (hour == 0 && min == 0) alarm.setText("알림 없음");
-                        else if (hour == 0) alarm.setText(String.valueOf(min + " 분 전"));
-                        else if (min == 0) alarm.setText(String.valueOf(hour) + " 시간 전");
-                        else alarm.setText(String.valueOf(hour) + " 시간 반 전");
-
-                        location.setText(schedule.getLocation());
-                        attend.setText(schedule.getAttandances());
-                        color.setBackgroundColor(Color.parseColor(schedule.getColor()));
-                        memo.setText(schedule.getMemo());
+                            location.setText(schedule.getLocation());
+                            attend.setText(schedule.getAttandances());
+                            color.setBackgroundColor(Color.parseColor(schedule.getColor()));
+                            memo.setText(schedule.getMemo());
+                        }
                     }
 
                     @Override
