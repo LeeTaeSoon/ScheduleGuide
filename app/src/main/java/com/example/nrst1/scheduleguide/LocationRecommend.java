@@ -2,8 +2,10 @@ package com.example.nrst1.scheduleguide;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import org.json.JSONException;
@@ -14,6 +16,8 @@ import java.util.Scanner;
 
 public class LocationRecommend extends AppCompatActivity {
 
+    DrawerLayout drawerLayout;
+    FrameLayout sideMenuContainer;
 
     String name;
     String address;
@@ -27,8 +31,25 @@ public class LocationRecommend extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_recommend);
 
+        initActionBar();
         init();
 
+    }
+    
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(sideMenuContainer)) drawerLayout.closeDrawer(sideMenuContainer);
+        else super.onBackPressed();
+    }
+
+    public void initActionBar() {
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        sideMenuContainer = (FrameLayout) findViewById(R.id.side_bar_fragment_container);
+
+        ActionBarHandler actionBarHandler = new ActionBarHandler(this, getSupportActionBar());
+        actionBarHandler.setBasicActionBar();
+        actionBarHandler.setTitle("장소 추천");
+        actionBarHandler.setDrawerMenu(drawerLayout, sideMenuContainer);
     }
 
     public void init() {
